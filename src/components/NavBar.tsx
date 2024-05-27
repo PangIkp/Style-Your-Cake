@@ -1,9 +1,43 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 
 const NavBar = () => {
+  const [scroll, setScroll] = useState(0);
+
+  const handleScroll = () => setScroll(document.documentElement.scrollTop);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      console.log(prevScrollPos, currentScrollPos);
+      if (prevScrollPos > currentScrollPos) {
+        setBarMargin(0);
+        // console.log(barMargin);
+      } else {
+        setBarMargin(60);
+      }
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [prevScrollPos]);
+
+  const [barMargin, setBarMargin] = useState(0);
+
   return (
-    <div>
+    <div className={`w-full ${scroll > 100 && location.pathname == "/"
+    ? "translate-y-[-60px]"
+    : ""}`}>
       {/* Top bar */}
       <div className="bg-[#E06386] text-white flex justify-between items-center p-4 px-20 ">
         <div className="flex items-center space-x-4">
@@ -12,19 +46,21 @@ const NavBar = () => {
           <Link to="/">
           <img src="/Facebook.png" alt="Logo" className="h-[15px] ml-[50px]" />
           </Link>
-
-          <span className="text-[14px] mr-[30px] underline">
+           
+          <a href = "https://www.facebook.com/?stype=lo&deoia=1&jlou=Afd1rvbV2APaxeW4XfucNrsCAutYizDNypiQkKm3ZbcUAlwwT0SUQs9Ejx7UVyOs5WZbzBowtPL5zvghEUAo1XNW28sLOhrUepORjfU3hZyaQA&smuh=9845&lh=Ac8p80tDkNWY5sfpYKo" 
+             className="text-[14px] mr-[30px] underline">
             @StyleYourCake_
-          </span>
+          </a>
 
-          <div className="border border-[0.5px] border-solid border-white h-4 " />
+          <div className="border border-[0.5px] border-solid border-white h-4 "/>
 
           <img
             src="/Insta.png"
             alt="Instagram"
             className="h-[15px] ml-[30px]"
           />
-          <span className="text-[14px] underline">@StyleYourCake_</span>
+          <a href = "https://www.instagram.com/" className="text-[14px] underline">@StyleYourCake_</a>
+
         </div>
         <div className="flex items-center space-x-4">
           <span className="font-bold text-[14px] mr-[12px]">Help</span>
