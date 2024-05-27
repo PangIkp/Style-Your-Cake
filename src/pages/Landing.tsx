@@ -1,8 +1,17 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
 import Main from '../components/Main'
+import { dbConnect } from '../db/dbConnect'
 
 const Landing = () => {
+  // const connect = async () => {
+  //   try {
+  //       await dbConnect()
+  //   }
+  //   catch(error) {
+  //       console.log(error)
+  //   }}
+  //   connect();
   return (
     <div>
       <div className='mt-[140px]'>
