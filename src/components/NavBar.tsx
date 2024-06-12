@@ -16,7 +16,7 @@ const NavBar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset;
-      console.log(prevScrollPos, currentScrollPos);
+      // console.log(prevScrollPos, currentScrollPos);
       if (prevScrollPos > currentScrollPos) {
         setBarMargin(0);
         // console.log(barMargin);
