@@ -2,6 +2,8 @@ import React from "react";
 import NavBar from "../components/NavBar";
 import Main from "../components/Main";
 import ProductCard from "../components/ProductCard";
+import Footer from "../components/Footer";
+import Copyright from "../components/Copyright";
 import { dbConnect } from "../db/dbConnect";
 import { Link } from "react-router-dom";
 
@@ -227,7 +229,7 @@ const Landing = () => {
           </div>
        </div>
 
-      <div className="flex justify-center items-center mt-[50px]">
+      <div className="flex justify-center items-center mt-[50px] mb-[70px]">
         <div className="rounded-[15px] bg-[#E06386] text-white h-[70px] w-[1250px] flex justify-center items-center space-x-4">
           <img src="/Callcenter.png" alt="Callcenter" className="h-[20px] ml-[20px]" />
           <span className="font-semibold text-[14px]"> If you have any questions or need assistance at any point during the ordering process, feel free to contact our customer support team for help.</span>
@@ -236,20 +238,32 @@ const Landing = () => {
 
       <div className="border border-[0.5px] border-solid border-black w-full h-[0.5px]" />
 
-      {/* Recommendation */}
+      {/* Overview */}
       <p className="text-[26px] font-semibold flex items-center justify-center mt-[60px]">
         #StyleYourCake
       </p>
 
-      <p className="text-[#666666] flex items-center justify-center">
+      <p className="text-[#666666] flex items-center justify-center ">
         Indulge in sweet perfection with our exquisite cakes!
       </p>
 
 
+      <div className="flex justify-center mt-[60px] mb-[180px] overflow-x-auto">
+        <div className="flex overflow-x-auto space-x-[20px] pr-[70px] pl-[70px]">
+          <img src="/Overview1.webp" alt="Overview1" className="h-[460px] w-[320px] rounded-[15px] inline-block" />
+          <img src="/Overview2.png" alt="Overview2" className="h-[460px] w-[320px] rounded-[15px] inline-block" />
+          <img src="/Overview3.png" alt="Overview3" className="h-[460px] w-[320px] rounded-[15px] inline-block" />
+          <img src="/Overview4.webp" alt="Overview4" className="h-[460px] w-[320px] rounded-[15px] inline-block" />
+          <img src="/Overview5.png" alt="Overview5" className="h-[460px] w-[320px] rounded-[15px] inline-block" />
+          <img src="/Overview6.png" alt="Overview6" className="h-[460px] w-[320px] rounded-[15px] inline-block" />
+          <img src="/Overview7.png" alt="Overview7" className="h-[460px] w-[320px] mr-[70px] rounded-[15px] inline-block" />
+        </div>
+      </div>
 
-       
+      <Footer/>
 
-  </div>
+      <Copyright/>
+    </div>
   );
 };
 
