@@ -71,9 +71,9 @@ const NavBar = () => {
 
       {/* Main NavBar */}
       <div className="bg-white flex justify-between items-center p-4 px-20 shadow-md">
-        <button className="flex items-center space-x-4">
+        <a href="/" className="flex items-center space-x-4">
           <img src="/Logo.png" alt="Logo" className="h-[60px] w-[200px]" />
-        </button>
+        </a>
 
         <div className="flex justify-start items-center">
           <div className="flex items-center space-x-[20px] ml-[30px]">

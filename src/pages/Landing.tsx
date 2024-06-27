@@ -29,11 +29,11 @@ const Landing = () => {
           Top Selling
         </p>
 
-        <p className="text-[#666666] flex items-center justify-center">
+        <p className="text-[#666666] flex items-center justify-center mb-[50px]">
           Discover our top-selling creations.
         </p>
 
-        <div className="flex ml-[50px]">
+        <div className="flex ml-[50px] space-x-10">
           <ProductCard
             id="Bc-01"
             name="Jubilant Occasion"
@@ -68,12 +68,12 @@ const Landing = () => {
         </div>
       </div>
 
-      <div className="flex justify-center mt-[40px] mb-[40px]">
+      <div className="flex justify-center mt-[10px] mb-[40px]">
         <Link to="/category">
-          <button className="pl-12 pr-12 flex justify-between items-center bg-gradient-to-b from-[#D63484] to-[#E06386] text-[18px] font-semibold hover:from-[#D63484] hover:to-[#FFCCD2] text-white rounded-[20px] h-[45px] w-[220px]">
+          <a href="/category" className="pl-12 pr-12 flex justify-between items-center bg-gradient-to-b from-[#D63484] to-[#E06386] text-[18px] font-semibold hover:from-[#D63484] hover:to-[#FFCCD2] text-white rounded-[20px] h-[45px] w-[220px]">
             View more
             <img src="/View.png" alt="View more" className="h-[12px]" />
-          </button>
+          </a>
         </Link>
       </div>
 
@@ -84,11 +84,11 @@ const Landing = () => {
         Recommendation
       </p>
 
-      <p className="text-[#666666] flex items-center justify-center">
+      <p className="text-[#666666] mb-[40px] flex items-center justify-center">
         Our recommended creations or design your own masterpiece.
       </p>
 
-      <div className="flex ml-[50px] flex-wrap">
+      <div className="flex ml-[50px] space-x-10 flex-wrap">
         <ProductCard
           id="Bc-01"
           name="Jubilant Occasion"
@@ -154,12 +154,12 @@ const Landing = () => {
         />
       </div>
 
-      <div className="flex justify-center mt-[40px] mb-[40px]">
+      <div className="flex justify-center mt-[10px] mb-[40px]">
         <Link to="/category">
-          <button className="pl-12 pr-12 flex justify-between items-center bg-gradient-to-b from-[#D63484] to-[#E06386] text-[18px] font-semibold hover:from-[#D63484] hover:to-[#FFCCD2] text-white rounded-[20px] h-[45px] w-[220px]">
+          <a href="/category" className="pl-12 pr-12 flex justify-between items-center bg-gradient-to-b from-[#D63484] to-[#E06386] text-[18px] font-semibold hover:from-[#D63484] hover:to-[#FFCCD2] text-white rounded-[20px] h-[45px] w-[220px]">
             View more
             <img src="/View.png" alt="View more" className="h-[12px]" />
-          </button>
+          </a>
         </Link>
       </div>
 
