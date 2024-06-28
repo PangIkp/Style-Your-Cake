@@ -4,7 +4,7 @@ import { text } from "stream/consumers";
 
 const Footer = () => {
   return (
-    <div className="bg-[#FFCCD2] text-black h-[300px] w-full flex justify-between items-center space-x-4 pl-20 pr-20">
+    <div className="bg-[#FFE5E8] text-black h-[300px] w-full flex justify-between items-center space-x-4 pl-20 pr-20">
       <div>
         <p className="text-[14px] font-semibold ">2,000 users registered since  </p>
         <p className="text-[14px] font-semibold mb-[30px] ">January 2023  </p>
@@ -15,7 +15,7 @@ const Footer = () => {
           <div className="relative mr-2">
               <input
                 placeholder="Your email"  style={{ fontSize: "12px", height: "30px", width: "150"}}
-                className="bg-[#FFCCD2] border border-black rounded-full px-4 py-2 w-full pr-10 placeholder-black"/>
+                className="bg-[#FFE5E8] border border-black rounded-full px-4 py-2 w-full pr-10 placeholder-black"/>
           </div>
           <button className="bg-[#E06386] text-[12px] hover:bg-[#D63484] text-white rounded-[20px] h-[30px] w-[90px]">
             Subscribe

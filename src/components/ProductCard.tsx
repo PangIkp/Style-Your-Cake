@@ -35,7 +35,7 @@ const ProductCard = ({
           <h2 className="mt-4 text-[14px] font-semibold mb-2">{name}</h2>
           <p className="mt-4 text-[14px]">{price} THB</p>
         </div>  
-        <button className="pl-5 pr-5 flex justify-between items-center mt-10 bg-[#FFCCD2] text-[12px] text-[#503C3C] hover:bg-[#D63484] hover:text-white rounded h-[35px] w-[90px] rounded-[20px] border-[1px] border-[#503C3C]">
+        <button className="pl-5 pr-5 flex justify-between items-center mt-10 bg-[#FFE5E8] text-[12px] text-[#503C3C] hover:bg-[#E06386] hover:text-white rounded h-[35px] w-[90px] rounded-[20px] border-[1px] border-[#503C3C]">
             <img src="/Add.png" alt="Add" className="h-[15px]"/>
             ADD
         </button>

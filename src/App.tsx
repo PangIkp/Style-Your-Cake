@@ -10,6 +10,7 @@ import DesignYourCake from "./pages/DesignYourCake";
 import Reviews from "./pages/Reviews";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import SelectYourCake from "./pages/SelectYourCake";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,13 @@ const router = createBrowserRouter([
     path: "/signup",
     element: (
       <SignUp/>
+    ),
+  },
+
+  {
+    path: "/select",
+    element: (
+      <SelectYourCake/>
     ),
   },
 

@@ -68,31 +68,31 @@ const Slicer = () => {
         <div>
           <h2 className="p-2 font-semibold text-[14px]">All Product Categories</h2>
           <div className="flex flex-wrap gap-2 mt-2 ml-2">
-            <button className="px-3 py-1 bg-white hover:bg-[#FFCCD2] text-[12px] font-light border border-[#9F9F9F] rounded-full ">
+            <button className="px-3 py-1 bg-white hover:bg-[#FFE5E8] text-[12px] font-light border border-[#9F9F9F] rounded-full ">
               Show All
             </button>
 
-            <button className="px-3 py-1 bg-white hover:bg-[#FFCCD2] border border-[#9F9F9F] text-[13px] font-light rounded-full">
+            <button className="px-3 py-1 bg-white hover:bg-[#FFE5E8] border border-[#9F9F9F] text-[13px] font-light rounded-full">
               Birthday cake
             </button>
 
-            <button className="px-3 py-1 bg-white  hover:bg-[#FFCCD2] border border-[#9F9F9F] text-[13px] font-light rounded-full">
+            <button className="px-3 py-1 bg-white  hover:bg-[#FFE5E8] border border-[#9F9F9F] text-[13px] font-light rounded-full">
               Fruit cake
             </button>
 
-            <button className="px-3 py-1 bg-white  hover:bg-[#FFCCD2] border border-[#9F9F9F] text-[13px] font-light rounded-full">
+            <button className="px-3 py-1 bg-white  hover:bg-[#FFE5E8] border border-[#9F9F9F] text-[13px] font-light rounded-full">
               Wedding cake
             </button>
 
-            <button className="px-3 py-1 bg-white  hover:bg-[#FFCCD2] border border-[#9F9F9F] text-[13px] font-light rounded-full">
+            <button className="px-3 py-1 bg-white  hover:bg-[#FFE5E8] border border-[#9F9F9F] text-[13px] font-light rounded-full">
               Minimalist cake
             </button>
 
-            <button className="px-3 py-1 bg-white  hover:bg-[#FFCCD2] border border-[#9F9F9F] text-[13px] font-light rounded-full">
+            <button className="px-3 py-1 bg-white  hover:bg-[#FFE5E8] border border-[#9F9F9F] text-[13px] font-light rounded-full">
               Cartoon cake
             </button>
 
-            <button className="px-3 py-1 bg-white  hover:bg-[#FFCCD2] border border-[#9F9F9F] text-[13px] font-light rounded-full">
+            <button className="px-3 py-1 bg-white  hover:bg-[#FFE5E8] border border-[#9F9F9F] text-[13px] font-light rounded-full">
               Romantic
             </button>
           </div>

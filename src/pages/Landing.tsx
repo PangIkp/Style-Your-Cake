@@ -19,7 +19,7 @@ const Landing = () => {
   return (
     <div>
       <div className="mt-[140px]">
-        <div className="fixed top-0 z-10 w-full ">
+        <div className="fixed top-0 z-10 w-full">
           <NavBar />
         </div>
         <Main />
