@@ -114,7 +114,7 @@ const Product: React.FC = () => {
                 {price * quantity} THB
               </span>
             </div>
-            <div className="flex items-center space-x-7 ">
+            <div className="items-center space-x-7 ">
               <button
                 className="bg-[#FFCCD2] bg-opacity-50 hover:bg-[#E06386] hover:bg-opacity-60 border-[1px] border-[#666666] text-gray-700 py-2 px-4 rounded-full"
                 onClick={decrementQuantity}
@@ -131,7 +131,7 @@ const Product: React.FC = () => {
                 +
               </button>
 
-              <button className="mt-6 mb-6 bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[45px] w-full">
+              <button className="mt-6 mb-6 bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[45px] w-[640px]">
                 Add to cart
               </button>
             </div>
