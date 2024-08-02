@@ -1,3 +1,4 @@
+import Copyright from '../components/Copyright';
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar';
 import { Link } from "react-router-dom";
@@ -46,7 +47,7 @@ const ResetPassword = () => {
 
         <Link to="/newpassword">
                 <button className="mt-6 mb-20 bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[45px] w-[480px]">
-                 Continue
+                Continue
                 </button>
         </Link>
 
@@ -54,6 +55,7 @@ const ResetPassword = () => {
       </div>
 
       <Footer/>
+      <Copyright/>
     </div>
   )
 }

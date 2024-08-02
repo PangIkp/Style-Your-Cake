@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar';
+import Copyright from '../components/Copyright';
 
 const SignUp = () => {
   return (
@@ -85,6 +86,7 @@ const SignUp = () => {
       </div>
 
       <Footer/>
+      <Copyright/>
     </div>
   )
 }

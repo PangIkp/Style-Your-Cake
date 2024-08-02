@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({
   id,
@@ -15,11 +16,12 @@ const ProductCard = ({
 }) => {
   return (
     <div className="ml-[20px] mb-[50px]">
-      <img
-        src={imgUrl}
-        alt={name}
-        className="rounded-[20px] h-[285px] w-[295px] border shadow-lg object-cover object-[0%_35%]"
-      />
+      <Link to="/product">
+        <img
+          src={imgUrl}
+          alt={name}
+          className="rounded-[20px] h-[285px] w-[295px] border shadow-lg object-cover object-[0%_35%]"/>
+       </Link>
 
       <div className="pt-3 flex justify-between w-[295px]">
         {/* category of cake */}

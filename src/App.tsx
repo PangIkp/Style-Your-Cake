@@ -14,6 +14,7 @@ import SelectYourCake from "./pages/SelectYourCake";
 import Password from "./pages/Password";
 import NewPassword from "./pages/NewPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Product from "./pages/Product";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,11 @@ const router = createBrowserRouter([
   {
     path: "/resetpassword",
     element: <ResetPassword/>,
+  },
+
+  {
+    path: "/product",
+    element: <Product/>,
   },
 
 

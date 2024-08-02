@@ -1,3 +1,4 @@
+import Copyright from '../components/Copyright';
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar';
 import { Link } from "react-router-dom";
@@ -38,6 +39,7 @@ const Password = () => {
       </div>
 
       <Footer/>
+      <Copyright/>
     </div>
   )
 }
