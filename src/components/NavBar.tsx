@@ -35,7 +35,7 @@ const NavBar = () => {
   const [barMargin, setBarMargin] = useState(0);
 
   return (
-    <div className={`w-full ${scroll > 100 && location.pathname == "/"
+    <div className={`w-full ${scroll > 100
     ? "translate-y-[-60px]"
     : ""}`}>
       {/* Top bar */}

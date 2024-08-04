@@ -28,7 +28,12 @@ const Product: React.FC = () => {
 
   return (
     <div>
-      <NavBar />
+      <div className="mt-[140px]">
+        <div className="fixed top-0 z-10 w-full ">
+          <NavBar/>
+        </div>
+      </div>
+      
       <div className="container mt-20 mx-auto mb-20">
         <div className="flex flex-wrap -mx-4">
           {/* Image Gallery */}

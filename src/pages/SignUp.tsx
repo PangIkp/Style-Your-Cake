@@ -7,7 +7,12 @@ import Copyright from '../components/Copyright';
 const SignUp = () => {
   return (
     <div>
-      <NavBar/>
+      <div className="mt-[140px]">
+        <div className="fixed top-0 z-10 w-full ">
+          <NavBar/>
+        </div>
+      </div>
+      
       <div className="flex flex-col items-center">
       <div className="w-[480px]">
         <p className="mt-10 mb-[10px] text-[26px] font-semibold">

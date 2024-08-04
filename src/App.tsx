@@ -15,6 +15,8 @@ import Password from "./pages/Password";
 import NewPassword from "./pages/NewPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Product from "./pages/Product";
+import Account from "./pages/Account";
+import Order from "./pages/Order";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +86,16 @@ const router = createBrowserRouter([
   {
     path: "/product",
     element: <Product/>,
+  },
+
+  {
+    path: "/account",
+    element: <Account/>,
+  },
+
+  {
+    path: "/order",
+    element: <Order/>,
   },
 
 

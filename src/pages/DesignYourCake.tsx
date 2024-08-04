@@ -6,7 +6,12 @@ import Copyright from "../components/Copyright";
 const DesignYourCake = () => {
   return (
     <div>
-      <NavBar/>
+      <div className="mt-[140px]">
+        <div className="fixed top-0 z-10 w-full ">
+          <NavBar/>
+        </div>
+      </div>
+      
       <p className="p-10 ml-10 text-[26px] font-semibold">
         Design your cake (option)
       </p>
