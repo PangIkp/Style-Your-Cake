@@ -125,7 +125,7 @@ const Order = () => {
                     <img
                       src="/Save.png"
                       alt="account"
-                      className="w-6 mr-2"
+                      className="w-4 mr-2"
                     />
                     <p> Save </p>
                   </div>
