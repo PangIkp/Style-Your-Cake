@@ -31,7 +31,7 @@ const Account = () => {
                   className="w-6 mr-4"
                 ></img>
                 <div>
-                  <h3 className="text-[14px] font-semibold">
+                  <h3 className="text-[13px] font-semibold">
                     Your Information
                   </h3>
                 </div>
@@ -44,7 +44,7 @@ const Account = () => {
                 <div className="mr-2"></div>
                 <img src="/Order.png" alt="account" className="w-6 mr-4"></img>
                 <div>
-                  <h3 className="text-[14px] font-semibold">Order History</h3>
+                  <h3 className="text-[13px] font-semibold">Order History</h3>
                 </div>
               </Link>
 
@@ -55,7 +55,7 @@ const Account = () => {
                 <div className="mr-2"></div>
                 <img src="/Logout.png" alt="account" className="w-6 mr-4"></img>
                 <div>
-                  <h3 className="text-[14px] text-[#D63484] font-semibold">
+                  <h3 className="text-[13px] text-[#D63484] font-semibold">
                     Logout
                   </h3>
                 </div>

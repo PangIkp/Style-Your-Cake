@@ -34,7 +34,7 @@ const Product: React.FC = () => {
         </div>
       </div>
       
-      <div className="container mt-20 mx-auto mb-20">
+      <div className="container pt-[80px] mx-auto mb-20">
         <div className="flex flex-wrap -mx-4">
           {/* Image Gallery */}
           <div className="px-4">

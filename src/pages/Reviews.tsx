@@ -13,7 +13,7 @@ const Reviews = () => {
         </div>
       </div>
       
-      <p className="mt-10 ml-20 text-[26px] font-semibold">
+      <p className="pt-[40px] ml-20 text-[26px] font-semibold">
         Reviews
       </p>
 
