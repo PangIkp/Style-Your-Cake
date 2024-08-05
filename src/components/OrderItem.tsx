@@ -48,7 +48,7 @@ const OrderSummary = () => {
 
   return (
     <div className="bg-white border shadow-lg rounded-[5px] mb-10">
-      <div className="p-3 pl-[60px] bg-[#FFCCD2] w-full">
+      <div className="p-3 pl-[60px] bg-[#FFE5E8] w-full">
         <div className="flex justify-between items-center">
           <div className="px-4 py-2 bg-[#FFFFFF] rounded-full">
             <h1 className="text-[13px]">Order ID : #123123123</h1>

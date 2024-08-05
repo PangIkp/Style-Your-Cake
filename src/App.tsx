@@ -17,6 +17,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Product from "./pages/Product";
 import Account from "./pages/Account";
 import Order from "./pages/Order";
+import Cart from "./pages/Cart";
 
 const router = createBrowserRouter([
   {
@@ -96,6 +97,11 @@ const router = createBrowserRouter([
   {
     path: "/order",
     element: <Order/>,
+  },
+
+  {
+    path: "/cart",
+    element: <Cart/>,
   },
 
 

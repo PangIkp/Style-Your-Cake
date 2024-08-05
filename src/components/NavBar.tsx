@@ -110,7 +110,7 @@ const NavBar = () => {
             />
           </div>
 
-          <button className="relative">
+          <Link to="/cart" className="relative">
             <img
               src="/Cart.png"
               alt="Cart"
@@ -120,7 +120,7 @@ const NavBar = () => {
             <span className="absolute top-4 right-0 bg-[#503C3C] rounded-full h-[14px] w-[14px] flex items-center justify-center">
             <span className="text-[7px] font-bold text-white">0</span>
             </span>
-          </button>
+          </Link>
 
           {/* <div className='flex items-center space-x-2'>
             <img src="/Profile.png" alt='Logo' className='h-[20px]'/>
