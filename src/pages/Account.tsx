@@ -14,8 +14,8 @@ const Account = () => {
       <div className="flex flex-col p-20">
         <div className="flex items-center">
           <h1 className="flex items-center">
-            <span className="text-[28px] font-semibold">Account</span>
-            <span className="text-[28px] font-light mx-1">|</span>
+            <span className="text-[26px] font-semibold">Account</span>
+            <span className="text-[26px] font-light mx-1">|</span>
             <span className="font-semibold text-[16px]">Information</span>
           </h1>
         </div>

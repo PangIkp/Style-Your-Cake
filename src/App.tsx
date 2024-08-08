@@ -18,6 +18,7 @@ import Product from "./pages/Product";
 import Account from "./pages/Account";
 import Order from "./pages/Order";
 import Cart from "./pages/Cart";
+import WriteOnCake from "./pages/WriteOnCake";
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,11 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <Cart/>,
+  },
+
+  {
+    path: "/write",
+    element: <WriteOnCake/>,
   },
 
 
