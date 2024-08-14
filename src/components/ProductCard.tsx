@@ -16,7 +16,7 @@ const ProductCard = ({
 }) => {
   return (
     <div className="ml-[20px] mb-[50px]">
-      <Link to="/product">
+      <Link to="/product" onClick={() => window.scrollTo(0, 0)}>
         <img
           src={imgUrl}
           alt={name}

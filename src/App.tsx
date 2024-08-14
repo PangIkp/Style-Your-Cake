@@ -23,94 +23,65 @@ import WriteOnCake from "./pages/WriteOnCake";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <Landing/>
-    ),
+    element: <Landing key="landing" />,
   },
-
   {
     path: "/category",
-    element: (
-      <Category/>
-    ),
+    element: <Category key="category" />,
   },
-
   {
     path: "/design",
-    element: (
-      <DesignYourCake/>
-    ),
+    element: <DesignYourCake key="design" />,
   },
-
   {
     path: "/reviews",
-    element: (
-      <Reviews/>
-    ),
+    element: <Reviews key="reviews" />,
   },
-
   {
     path: "/login",
-    element: (
-      <Login/>
-    ),
+    element: <Login key="login" />,
   },
-
   {
     path: "/signup",
-    element: (
-      <SignUp/>
-    ),
+    element: <SignUp key="signup" />,
   },
-
   {
     path: "/select",
-    element: (
-      <SelectYourCake/>
-    ),
+    element: <SelectYourCake key="select" />,
   },
-
   {
     path: "/password",
-    element: <Password/>,
+    element: <Password key="password" />,
   },
-  
   {
     path: "/newpassword",
-    element: <NewPassword/>,
+    element: <NewPassword key="newpassword" />,
   },
-
   {
     path: "/resetpassword",
-    element: <ResetPassword/>,
+    element: <ResetPassword key="resetpassword" />,
   },
-
   {
     path: "/product",
-    element: <Product/>,
+    element: <Product key="product" />,
   },
-
   {
     path: "/account",
-    element: <Account/>,
+    element: <Account key="account" />,
   },
-
   {
     path: "/order",
-    element: <Order/>,
+    element: <Order key="order" />,
   },
-
   {
     path: "/cart",
-    element: <Cart/>,
+    element: <Cart key="cart" />,
   },
-
   {
     path: "/write",
-    element: <WriteOnCake/>,
+    element: <WriteOnCake key="write" />,
   },
-
-
 ]);
+
 
 export const App = () => <RouterProvider router={router}/>
