@@ -24,14 +24,14 @@ const WriteOnCake = () => {
               <img
                 src="/Hearth.png"
                 alt="Wink"
-                className="w-[400px] flex items-center"
+                className="w-[320px] flex items-center"
               />
             </div>
 
             {/* Cake Details and Customization Section */}
             <div className="flex flex-col justify-between w-1/2">
               <div className="p-6 bg-white rounded-lg shadow-lg border flex flex-col">
-                <div className="mb-6">
+                <div className="mb-2">
                   <h2 className="text-[12px] font-semibold">Cake details</h2>
                   <p className="mt-2 text-[12px]">
                     <span className="text-[#D63484]">Cake shape :</span> Heart
@@ -45,7 +45,7 @@ const WriteOnCake = () => {
                   </p>
                 </div>
 
-                <div className="mb-6">
+                <div> 
                   <label
                     htmlFor="message"
                     className="text-[12px] font-semibold"
@@ -54,13 +54,13 @@ const WriteOnCake = () => {
                   </label>
                   <textarea
                     id="message"
-                    className="mt-2 w-full p-2 border border-gray-300 text-[12px] rounded-md"
+                    className="mt-2 mb-2 w-full p-2 border border-gray-300 text-[12px] rounded-md"
                     maxLength={100}
                     placeholder="20 characters"
                   ></textarea>
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-4">
                   <label htmlFor="font" className="text-[12px] font-semibold">
                     Select font Size
                   </label>
@@ -76,7 +76,7 @@ const WriteOnCake = () => {
                     <option value="24">24px - Huge</option>
                   </select>
 
-                  <div className="flex justify-between mt-4 space-x-2">
+                  <div className="flex justify-between mt-2 space-x-2">
                     <button className="w-full h-16 border border-gray-300 rounded-md flex flex-col items-center justify-center hover:bg-[#FFCCD2]">
                       <span className="text-[13px]">Aa</span>
                       <span className="text-[13px]">สวัสดี</span>

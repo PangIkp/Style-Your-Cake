@@ -19,6 +19,7 @@ import Account from "./pages/Account";
 import Order from "./pages/Order";
 import Cart from "./pages/Cart";
 import WriteOnCake from "./pages/WriteOnCake";
+import Decorate from "./pages/Decorate";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,11 @@ const router = createBrowserRouter([
   {
     path: "/write",
     element: <WriteOnCake key="write" />,
+  },
+
+  {
+    path: "/decorate",
+    element: <Decorate key="decorate" />,
   },
 ]);
 

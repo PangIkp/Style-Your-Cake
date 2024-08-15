@@ -1,17 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import Slicer from "../components/Slicer";
 import ProductCard from "../components/ProductCard";
 import Dropdown from "../components/Dropdown";
 import Footer from "../components/Footer";
 import Copyright from "../components/Copyright";
+import axios from "axios";
 
 const Category = () => {
+  const [cakeDetail, setCakeDetail] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/api/v1/products");
+        // Handle the response data
+        setLoading(false);
+        setCakeDetail(response.data.data);
+      } catch (error) {
+        // Handle any errors
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  if (loading) return <div>Loading</div>;
   return (
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar/>
+          <NavBar />
         </div>
 
         <div className="flex justify-between items-center p-10 ml-10">
@@ -32,130 +51,29 @@ const Category = () => {
 
           {/* ProductCard */}
           <div className="flex flex-wrap">
-            <ProductCard
+          {cakeDetail.map((product, index) => (
+              <ProductCard
+                key={index}
+                id={product.id}
+                name={product.productName}
+                price={product.price}
+                category={product.category}
+                imgUrl={product.productPic}
+              />
+          ))}
+            {/* <ProductCard
               id="Bc-01"
               name="Jubilant Occasion"
               price={800}
               category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
+              imgUrl="https://drive.google.com/thumbnail?id=1_-KeE95-m1DNrTIHSRTSpd2f9gAgE5jy&sz=w1000"
+            /> */}
+           
           </div>
         </div>
-        <Footer/>
+        <Footer />
 
-        <Copyright/>
+        <Copyright />
       </div>
     </div>
   );
