@@ -31,7 +31,11 @@ const Cart: React.FC = () => {
       details: "Shape : Default (Round)",
       shape: "Shape : Round",
       flavour: "Flavour : Chocolate",
-      topping: "Strawberry (2), Blueberry (2), Brownie Cube (2)",
+      topping: [
+        { name: 'Strawberry', quantity: 2 },
+        { name: 'Blueberry', quantity: 2 },
+        { name: 'Brownie Cube', quantity: 2 },
+      ]
     },
   ]);
 
@@ -83,6 +87,7 @@ const Cart: React.FC = () => {
                 onRemove={() => handleRemove(item.id)}
               />
             ))}
+
           </div>
           <div className="w-[500px] h-full p-4 border ml-5">
             <div className="flex justify-between flex items-center">

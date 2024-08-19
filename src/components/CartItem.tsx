@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ToppingItem } from "../interfaces";
 
 interface CartItemProps {
   image: string;
@@ -11,7 +12,7 @@ interface CartItemProps {
   options?: string;
   flavour?: string;
   shape?: string;
-  topping?: string;
+  topping?: ToppingItem[];
   onIncrease: () => void;
   onDecrease: () => void;
   onRemove: () => void;
@@ -73,14 +74,22 @@ const CartItem: React.FC<CartItemProps> = ({
       </div>
 
       <div className="flex-1">
-      <div className="mt-[64px] space-y-2">
-      {topping && (
-          <p className="text-[#D63484] text-[12px] font-semibold">Add Toppings</p>
-        )}
-        <p className="text-[12px]">{topping}</p>
 
-        </div>
-        
+      <div className="space-y-2">
+          {topping && (
+            <p className="text-[#D63484] mt-16 text-[12px] font-semibold">
+              Add Toppings
+            </p>
+          )}
+          <ul>
+            {topping?.map((item: ToppingItem) => (
+              <li key={item.name}>
+                <span className="bg-[#D63484] rounded-[5px] text-[11px] text-white p-[0.5px] pl-2 pr-2 mr-1">{`x${item.quantity}`}</span>
+                <span className="text-[12px]">{item.name}</span>
+              </li>
+            ))}
+          </ul>
+      </div>
 
         {/* {
             if options is true 
@@ -91,7 +100,7 @@ const CartItem: React.FC<CartItemProps> = ({
         } */}
           {options && (
             <div className="flex-1 space-y-2">
-            <p className="text-[#D63484] font-semibold text-[12px]">Optional</p>
+            <p className="text-[#D63484] mt-16 font-semibold text-[12px]">Optional</p>
             <div className="flex items-center">
               <input 
                 type="checkbox" 
@@ -113,6 +122,7 @@ const CartItem: React.FC<CartItemProps> = ({
         <p className="font-semibold text-[14px] ml-3">{price} THB</p>
       </div>
     </div>
+
   );
 };
 
