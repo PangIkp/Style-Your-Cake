@@ -17,6 +17,7 @@ const Category = () => {
         // Handle the response data
         setLoading(false);
         setCakeDetail(response.data.data);
+        console.log(response.data.data);
       } catch (error) {
         // Handle any errors
         console.error("Error fetching data:", error);
@@ -66,7 +67,7 @@ const Category = () => {
               name="Jubilant Occasion"
               price={800}
               category="Birthday cake"
-              imgUrl="https://drive.google.com/thumbnail?id=1_-KeE95-m1DNrTIHSRTSpd2f9gAgE5jy&sz=w1000"
+              imgUrl="https://drive.google.com/thumbnail?id=1qA06JTgLyYPHg41MNrmAF3hJh388eR1A&sz=w1000"
             /> */}
            
           </div>
