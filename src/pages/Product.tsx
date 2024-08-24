@@ -1,6 +1,5 @@
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
-import { Link } from "react-router-dom";
 
 import React, { useState } from "react";
 import ProductCard from "../components/ProductCard";
