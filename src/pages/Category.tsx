@@ -6,9 +6,10 @@ import Dropdown from "../components/Dropdown";
 import Footer from "../components/Footer";
 import Copyright from "../components/Copyright";
 import axios from "axios";
+import { ProductItem } from "../interfaces";
 
 const Category = () => {
-  const [cakeDetail, setCakeDetail] = useState([]);
+  const [cakeDetail, setCakeDetail] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
