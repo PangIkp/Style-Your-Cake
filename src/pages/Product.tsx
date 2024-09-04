@@ -1,14 +1,57 @@
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
-import { Link } from "react-router-dom";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import Copyright from "../components/Copyright";
+import axios from "axios";
+import { ProductItem } from "../interfaces";
+
 
 const Product: React.FC = () => {
+  const location = useLocation();
+  const {
+    id,
+    name,
+    price: locationPrice,
+    category,
+    imgUrl,
+  } = location.state || {};
+
+  const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>([]);
+
+  useEffect(() => {
+    // Fetch products from your database or API based on the category
+    fetchRelatedProducts(category);
+    console.log(category, 'work')
+  }, [category]);
+
+  const fetchRelatedProducts = async (category: string) => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/api/v1/products"
+      );
+      const products = response.data.data
+      // console.log(products)
+      // Filter products by category and exclude the current product
+      const filteredProducts = products.filter(
+        (product:ProductItem) => product.category === category && product.id !== id
+      );
+
+      const shuffled = filteredProducts.sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 4);
+
+      setRelatedProducts(selected);
+    } catch (error) {
+      console.error("Error fetching related products:", error);
+    }
+  };
+
+  // Renamed to avoid conflict
   const [quantity, setQuantity] = useState<number>(1);
-  const [price, setPrice] = useState<number>(1250);
+  const [currentPrice, setCurrentPrice] = useState<number>(
+    locationPrice || 1250
+  );
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
 
   const incrementQuantity = () => setQuantity(quantity + 1);
@@ -30,38 +73,36 @@ const Product: React.FC = () => {
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar/>
+          <NavBar />
         </div>
       </div>
-      
+
       <div className="container pt-[80px] mx-auto mb-10">
         <div className="flex flex-wrap -mx-4">
           {/* Image Gallery */}
           <div className="px-4">
             <img
-              src="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Celebration Delight"
+              src={imgUrl}
+              alt={name}
               className="w-[420px] h-[620px] rounded-lg mb-4 border shadow-lg"
             />
           </div>
 
-          {/* Product Details */}
+          {/* Product Name */}
           <div className="w-[860px] px-4">
             <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-semibold mb-2">Jubilant Occasion</h1>
-              <p className="text-[#E06386] font-semibold text-[14px]">
-                {" "}
-                BC-01{" "}
-              </p>
+              <h1 className="text-2xl font-semibold mb-2">{name}</h1>
+              <p className="text-[#E06386] font-semibold text-[14px]">{id}</p>
             </div>
 
+            {/* Category */}
             <div className="inline-flex items-center border border-[#D63484] rounded-[20px] h-[35px] mb-10 px-4">
               <img
                 src="/Tag.png"
                 alt="Tag"
                 className="h-[18px] w-[18px] mr-2"
               />
-              <p className="text-[12px] text-[#D63484]">Birthday cake</p>
+              <p className="text-[12px] text-[#D63484]">{category}</p>
             </div>
 
             <div className="mb-10">
@@ -78,7 +119,7 @@ const Product: React.FC = () => {
                         : "bg-[#FFCCD2] bg-opacity-50 hover:bg-[#E06386] hover:bg-opacity-60"
                     } border-[1px] border-[#9F9F9F] py-2 px-4 rounded-[20px] w-[160px]`}
                     onClick={() => {
-                      setPrice(size.price);
+                      setCurrentPrice(size.price);
                       setSelectedSize(index);
                     }}
                   >
@@ -116,7 +157,7 @@ const Product: React.FC = () => {
                 SUBTOTAL
               </span>
               <span className="text-lg font-semibold">
-                {price * quantity} THB
+                {currentPrice * quantity} THB
               </span>
             </div>
             <div className="items-center space-x-7 ">
@@ -145,42 +186,21 @@ const Product: React.FC = () => {
           <h1 className="text-2xl font-semibold mt-10 mb-5">Related Product</h1>
 
           <div className="flex flex-wrap space-x-[44px]">
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-
-            <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
+            {relatedProducts.map((product:ProductItem) => (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                name={product.productName}
+                price={product.price}
+                category={product.category}
+                imgUrl={product.productPic}
+              />
+            ))}
           </div>
         </div>
       </div>
-      <Footer/>
-      <Copyright/>
+      <Footer />
+      <Copyright />
     </div>
   );
 };
