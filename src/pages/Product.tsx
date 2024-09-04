@@ -34,7 +34,7 @@ const Product: React.FC = () => {
         </div>
       </div>
       
-      <div className="container pt-[80px] mx-auto mb-20">
+      <div className="container pt-[80px] mx-auto mb-10">
         <div className="flex flex-wrap -mx-4">
           {/* Image Gallery */}
           <div className="px-4">
@@ -144,7 +144,7 @@ const Product: React.FC = () => {
 
           <h1 className="text-2xl font-semibold mt-10 mb-5">Related Product</h1>
 
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap space-x-[44px]">
             <ProductCard
               id="Bc-01"
               name="Jubilant Occasion"

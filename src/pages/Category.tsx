@@ -8,16 +8,29 @@ import Copyright from "../components/Copyright";
 import axios from "axios";
 import { ProductItem } from "../interfaces";
 
+interface FilterOptions {
+  category?: string;
+  priceRange?: string;
+}
+
 const Category = () => {
   const [cakeDetail, setCakeDetail] = useState<ProductItem[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [selectedPriceRange, setSelectedPriceRange] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("asc");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/v1/products");
+        const response = await axios.get(
+          "http://localhost:3001/api/v1/products"
+        );
         // Handle the response data
         setLoading(false);
         setCakeDetail(response.data.data);
+        setFilteredProducts(response.data.data); // เริ่มต้นด้วยการแสดงทั้งหมด
       } catch (error) {
         // Handle any errors
         console.error("Error fetching data:", error);
@@ -26,7 +39,68 @@ const Category = () => {
 
     fetchData();
   }, []);
-  if (loading) return <div>Loading</div>;
+
+  const handleChange = ({ category, priceRange }: FilterOptions) => {
+    let filtered = cakeDetail;
+
+    if (category && category !== "All") {
+      setSelectedCategory(category);
+      filtered = filtered.filter((product) => product.category === category);
+    } else if (selectedCategory !== "All") {
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory
+      );
+    }
+
+    if (priceRange && priceRange.length > 0) {
+      setSelectedPriceRange(priceRange);
+      filtered = filtered.filter((product) => {
+        const productPrice = product.price;
+        const [min, max] = priceRange.split("-").map(Number);
+        return (
+          productPrice >= min &&
+          (max ? productPrice <= max : productPrice > min)
+        );
+      });
+    } else if (selectedPriceRange && selectedPriceRange.length > 0) {
+      filtered = filtered.filter((product) => {
+        const productPrice = product.price;
+        const [min, max] = selectedPriceRange.split("-").map(Number);
+        return (
+          productPrice >= min &&
+          (max ? productPrice <= max : productPrice > min)
+        );
+      });
+    }
+
+    
+    let sortedProducts = [...filtered];
+    if (sortBy == "asc") {
+      sortedProducts.sort((a, b) => a.price - b.price);
+    }
+    if (sortBy == "desc") {
+      sortedProducts.sort((a, b) => b.price - a.price);
+    }
+    
+    setFilteredProducts(sortedProducts);
+  };
+
+  const handleSort = ({ sortBy }: { sortBy: string }) => {
+    let sortedProducts = [...filteredProducts];
+    if (sortBy == "asc") {
+      sortedProducts.sort((a, b) => a.price - b.price);
+      setSortBy(sortBy)
+    }
+    if (sortBy == "desc") {
+      sortedProducts.sort((a, b) => b.price - a.price);
+      setSortBy(sortBy)
+    }
+
+    setFilteredProducts(sortedProducts);
+  };
+
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div>
       <div className="mt-[140px]">
@@ -43,16 +117,16 @@ const Category = () => {
 
           <div className="flex items-center mr-10">
             <p className="text-[15px] mr-3 font-semibold">Sort by :</p>
-            <Dropdown />
+            <Dropdown onSelect={handleSort} />
           </div>
         </div>
 
-        <div className="flex justify-between items-start">
-          <Slicer />
+        <div className="flex justify-between items-start px-[50px] mb-[50px]">
+          <Slicer onChange={handleChange} />
 
           {/* ProductCard */}
-          <div className="flex flex-wrap">
-          {cakeDetail.map((product, index) => (
+          <div className="grid grid-cols-3 gap-4">
+            {filteredProducts.map((product, index) => (
               <ProductCard
                 key={index}
                 id={product.id}
@@ -61,15 +135,7 @@ const Category = () => {
                 category={product.category}
                 imgUrl={product.productPic}
               />
-          ))}
-            {/* <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://drive.google.com/thumbnail?id=1_-KeE95-m1DNrTIHSRTSpd2f9gAgE5jy&sz=w1000"
-            /> */}
-           
+            ))}
           </div>
         </div>
         <Footer />

@@ -15,7 +15,7 @@ const ProductCard = ({
   imgUrl: string;
 }) => {
   return (
-    <div className="ml-[20px] mb-[50px]">
+    <div className="mb-[50px]">
       <Link to="/product" >
         <img
           src={imgUrl}

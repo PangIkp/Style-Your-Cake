@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
-const Dropdown = () => {
+const Dropdown = ({
+  onSelect,
+}: {
+  onSelect: ({ sortBy }: { sortBy: string }) => void;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Bestsellers");
 
@@ -8,7 +12,7 @@ const Dropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const selectOption = (option : string) => {
+  const selectOption = (option: string) => {
     setSelectedOption(option);
     setIsOpen(false);
   };
@@ -40,36 +44,61 @@ const Dropdown = () => {
 
       {isOpen && (
         <div className="origin-top-right absolute right-0 mt-2 w-[200px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+          <div
+            className="py-1"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="options-menu"
+          >
             <button
               className={`block px-4 py-2 text-[13px] text-gray-700 w-full text-center ${
-                selectedOption === "Bestsellers" ? "bg-[#FFCCD2] text-pink-600" : "hover:bg-gray-100"
+                selectedOption === "Bestsellers"
+                  ? "bg-[#FFCCD2] text-pink-600"
+                  : "hover:bg-gray-100"
               }`}
-              onClick={() => selectOption("Bestsellers")}
+              onClick={() => {
+                selectOption("Bestsellers");
+                onSelect({ sortBy: "asc"});
+              }}
             >
               Bestsellers
             </button>
             <button
               className={`block px-4 py-2 text-[13px] text-gray-700 w-full text-center ${
-                selectedOption === "Popularity" ? "bg-[#FFCCD2] text-pink-600" : "hover:bg-gray-100"
+                selectedOption === "Popularity"
+                  ? "bg-[#FFCCD2] text-pink-600"
+                  : "hover:bg-gray-100"
               }`}
-              onClick={() => selectOption("Popularity")}
+              onClick={() => {
+                selectOption("Popularity");
+                onSelect({ sortBy: "asc" });
+              }}
             >
               Popularity
             </button>
             <button
               className={`block px-4 py-2 text-[13px] text-gray-700 w-full text-center ${
-                selectedOption === "Price, Low to High" ? "bg-[#FFCCD2] text-pink-600" : "hover:bg-gray-100"
+                selectedOption === "Price, Low to High"
+                  ? "bg-[#FFCCD2] text-pink-600"
+                  : "hover:bg-gray-100"
               }`}
-              onClick={() => selectOption("Price, Low to High")}
+              onClick={() => {
+                selectOption("Price, Low to High");
+                onSelect({ sortBy: "asc" });
+              }}
             >
               Price, Low to High
             </button>
             <button
               className={`block px-4 py-2 text-[13px] text-gray-700 w-full text-center ${
-                selectedOption === "Price, High to Low" ? "bg-[#FFCCD2] text-pink-600" : "hover:bg-gray-100"
+                selectedOption === "Price, High to Low"
+                  ? "bg-[#FFCCD2] text-pink-600"
+                  : "hover:bg-gray-100"
               }`}
-              onClick={() => selectOption("Price, High to Low")}
+              onClick={() => {
+                selectOption("Price, High to Low");
+                onSelect({ sortBy: "desc" });
+              }}
             >
               Price, High to Low
             </button>

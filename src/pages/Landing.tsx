@@ -54,7 +54,7 @@ const Landing = () => {
           Discover our top-selling creations.
         </p>
 
-        <div className="flex ml-[50px] space-x-10">
+        <div className="grid grid-cols-4 gap-10 px-[68px]">
           {cakeDetail.slice(0, 4).map((product, index) => (
             <ProductCard
               key={index}
@@ -91,7 +91,7 @@ const Landing = () => {
         Our recommended creations or design your own masterpiece.
       </p>
 
-      <div className="flex ml-[80px] flex-wrap">
+      <div className="grid grid-cols-4 gap-10 px-[68px]">
         {selectedProducts.map((product, index) => (
           <ProductCard
             key={index}
