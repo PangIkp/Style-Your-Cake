@@ -22,30 +22,47 @@ const Category = () => {
   const [sortBy, setSortBy] = useState<string>("asc");
 
   useEffect(() => {
+    const loadImage = (imageUrl: string) => {
+      return new Promise((resolve, reject) => {
+        const loadImg = new Image();
+        loadImg.src = imageUrl;
+        loadImg.onload = () => setTimeout(() => resolve(imageUrl), 2000);
+        loadImg.onerror = err => reject(err);
+      });
+    };
+  
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3001/api/v1/products"
-        );
-        // Handle the response data
+        const response = await axios.get("http://localhost:3001/api/v1/products");
+        const products = response.data.data;
+  
+        // Preload all product images
+        const imagePreloadPromises = products.map((product: ProductItem) => loadImage(product.productPic));
+  
+        // Wait for all images to be preloaded
+        await Promise.all(imagePreloadPromises);
+  
+        // Once images are preloaded, update the state
         setLoading(false);
-        setCakeDetail(response.data.data);
-        setFilteredProducts(response.data.data); // เริ่มต้นด้วยการแสดงทั้งหมด
+        setCakeDetail(products);
+        setFilteredProducts(products); // Display all products by default
+  
       } catch (error) {
-        // Handle any errors
         console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchData();
   }, []);
-
+  
   const handleChange = ({ category, priceRange }: FilterOptions) => {
     let filtered = cakeDetail;
 
-    if (category && category !== "All") {
+    if (category) {
       setSelectedCategory(category);
-      filtered = filtered.filter((product) => product.category === category);
+      if (category !== "All") {
+        filtered = filtered.filter((product) => product.category === category);
+      }
     } else if (selectedCategory !== "All") {
       filtered = filtered.filter(
         (product) => product.category === selectedCategory
