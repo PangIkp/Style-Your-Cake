@@ -22,7 +22,7 @@ const Dropdown = ({
       <div>
         <button
           type="button"
-          className="inline-flex justify-between w-[200px] rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-[13px] font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="inline-flex justify-between w-[242px] rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-[13px] font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           onClick={toggleDropdown}
         >
           {selectedOption}
@@ -58,24 +58,12 @@ const Dropdown = ({
               }`}
               onClick={() => {
                 selectOption("Bestsellers");
-                onSelect({ sortBy: "asc"});
+                onSelect({ sortBy: "asc" });
               }}
             >
               Bestsellers
             </button>
-            <button
-              className={`block px-4 py-2 text-[13px] text-gray-700 w-full text-center ${
-                selectedOption === "Popularity"
-                  ? "bg-[#FFCCD2] text-pink-600"
-                  : "hover:bg-gray-100"
-              }`}
-              onClick={() => {
-                selectOption("Popularity");
-                onSelect({ sortBy: "asc" });
-              }}
-            >
-              Popularity
-            </button>
+
             <button
               className={`block px-4 py-2 text-[13px] text-gray-700 w-full text-center ${
                 selectedOption === "Price, Low to High"
