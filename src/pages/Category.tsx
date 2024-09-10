@@ -27,34 +27,37 @@ const Category = () => {
         const loadImg = new Image();
         loadImg.src = imageUrl;
         loadImg.onload = () => setTimeout(() => resolve(imageUrl), 2000);
-        loadImg.onerror = err => reject(err);
+        loadImg.onerror = (err) => reject(err);
       });
     };
-  
+
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/v1/products");
+        const response = await axios.get(
+          "http://localhost:3001/api/v1/products"
+        );
         const products = response.data.data;
-  
+
         // Preload all product images
-        const imagePreloadPromises = products.map((product: ProductItem) => loadImage(product.productPic));
-  
+        const imagePreloadPromises = products.map((product: ProductItem) =>
+          loadImage(product.productPic)
+        );
+
         // Wait for all images to be preloaded
         await Promise.all(imagePreloadPromises);
-  
+
         // Once images are preloaded, update the state
         setLoading(false);
         setCakeDetail(products);
         setFilteredProducts(products); // Display all products by default
-  
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
   }, []);
-  
+
   const handleChange = ({ category, priceRange }: FilterOptions) => {
     let filtered = cakeDetail;
 
@@ -90,7 +93,6 @@ const Category = () => {
       });
     }
 
-    
     let sortedProducts = [...filtered];
     if (sortBy == "asc") {
       sortedProducts.sort((a, b) => a.price - b.price);
@@ -98,7 +100,7 @@ const Category = () => {
     if (sortBy == "desc") {
       sortedProducts.sort((a, b) => b.price - a.price);
     }
-    
+
     setFilteredProducts(sortedProducts);
   };
 
@@ -106,11 +108,11 @@ const Category = () => {
     let sortedProducts = [...filteredProducts];
     if (sortBy == "asc") {
       sortedProducts.sort((a, b) => a.price - b.price);
-      setSortBy(sortBy)
+      setSortBy(sortBy);
     }
     if (sortBy == "desc") {
       sortedProducts.sort((a, b) => b.price - a.price);
-      setSortBy(sortBy)
+      setSortBy(sortBy);
     }
 
     setFilteredProducts(sortedProducts);
@@ -131,15 +133,19 @@ const Category = () => {
             <p className="px-3 text-[26px]">|</p>
             <p className="text-[15px] text-[#666666]">All Product</p>
           </div>
-
-          <div className="flex items-center mr-10">
-            <p className="text-[15px] mr-3 font-semibold">Sort by :</p>
-            <Dropdown onSelect={handleSort} />
-          </div>
         </div>
 
         <div className="flex justify-between items-start px-[50px] mb-[50px]">
-          <Slicer onChange={handleChange} />
+          <div>
+            <div className="flex items-center px-[25px] mb-[20px]">
+              <p className="text-[15px] mr-3 font-semibold">Sort by :</p>
+              <Dropdown onSelect={handleSort} />
+            </div>
+
+            <div className="">
+              <Slicer onChange={handleChange} />
+            </div>
+          </div>
 
           {/* ProductCard */}
           <div className="grid grid-cols-3 gap-4">

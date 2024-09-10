@@ -84,7 +84,7 @@ const Product: React.FC = () => {
             <img
               src={imgUrl}
               alt={name}
-              className="w-[420px] h-[620px] rounded-lg mb-4 border shadow-lg"
+              className="w-[420px] h-fill rounded-lg mb-4 border shadow-lg"
             />
           </div>
 
