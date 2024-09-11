@@ -6,7 +6,7 @@ import ProductCard from "../components/ProductCard";
 import Copyright from "../components/Copyright";
 import axios from "axios";
 import { ProductItem } from "../interfaces";
-
+import { useCart } from "../components/CartContext";
 
 const Product: React.FC = () => {
   const location = useLocation();
@@ -19,23 +19,22 @@ const Product: React.FC = () => {
   } = location.state || {};
 
   const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>([]);
+  const { addToCart } = useCart(); // Access addToCart from context
 
   useEffect(() => {
-    // Fetch products from your database or API based on the category
-    fetchRelatedProducts(category);
-    console.log(category, 'work')
+    if (category) {
+      fetchRelatedProducts(category);
+    }
   }, [category]);
 
   const fetchRelatedProducts = async (category: string) => {
     try {
-      const response = await axios.get(
-        "http://localhost:3001/api/v1/products"
-      );
-      const products = response.data.data
-      // console.log(products)
+      const response = await axios.get("http://localhost:3001/api/v1/products");
+      const products = response.data.data;
       // Filter products by category and exclude the current product
       const filteredProducts = products.filter(
-        (product:ProductItem) => product.category === category && product.id !== id
+        (product: ProductItem) =>
+          product.category === category && product.id !== id
       );
 
       const shuffled = filteredProducts.sort(() => 0.5 - Math.random());
@@ -69,10 +68,28 @@ const Product: React.FC = () => {
     { weight: "4 pound", servings: 20, price: 1200 },
   ];
 
+  const handleAddToCart = () => {
+    if (selectedSize === null) {
+      alert("Please select a size.");
+      return;
+    }
+    const size = sizes[selectedSize];
+    addToCart({
+      id,
+      image: imgUrl,
+      name,
+      size: size.weight,
+      productId: id.toString(),
+      quantity,
+      price: currentPrice,
+      details: `Size: ${size.weight}`,
+    });
+  };
+
   return (
     <div>
       <div className="mt-[140px]">
-        <div className="fixed top-0 z-10 w-full ">
+        <div className="fixed top-0 z-10 w-full">
           <NavBar />
         </div>
       </div>
@@ -160,7 +177,7 @@ const Product: React.FC = () => {
                 {currentPrice * quantity} THB
               </span>
             </div>
-            <div className="items-center space-x-7 ">
+            <div className="items-center space-x-7">
               <button
                 className="bg-[#FFCCD2] bg-opacity-50 hover:bg-[#E06386] hover:bg-opacity-60 border-[1px] border-[#666666] text-gray-700 py-2 px-4 rounded-full"
                 onClick={decrementQuantity}
@@ -177,7 +194,10 @@ const Product: React.FC = () => {
                 +
               </button>
 
-              <button className="mt-6 mb-6 bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[45px] w-[640px]">
+              <button
+                className="mt-6 mb-6 bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[45px] w-[640px]"
+                onClick={handleAddToCart}
+              >
                 Add to cart
               </button>
             </div>
@@ -186,7 +206,7 @@ const Product: React.FC = () => {
           <h1 className="text-2xl font-semibold mt-10 mb-5">Related Product</h1>
 
           <div className="flex flex-wrap space-x-[44px]">
-            {relatedProducts.map((product:ProductItem) => (
+            {relatedProducts.map((product: ProductItem) => (
               <ProductCard
                 key={product.id}
                 id={product.id}

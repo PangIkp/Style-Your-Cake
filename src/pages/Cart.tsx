@@ -1,64 +1,28 @@
+// Cart.tsx
+import React from 'react';
 import CartItem from "../components/CartItem";
-import React, { useState } from "react";
 import Copyright from "../components/Copyright";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import { Link } from "react-router-dom";
+import { useCart } from '../components/CartContext';
 
 const Cart: React.FC = () => {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "Celebration Delight",
-      size: "1 pound",
-      productId: "BC-01",
-      quantity: 1,
-      price: 1250,
-      details: "Size : 1 pound",
-      options: "Writing on the cake",
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "Design your cake",
-      size: "1 pound",
-      productId: "DC-01",
-      quantity: 1,
-      price: 723,
-      details: "Shape : Default (Round)",
-      shape: "Shape : Round",
-      flavour: "Flavour : Chocolate",
-      topping: [
-        { name: 'Strawberry', quantity: 2 },
-        { name: 'Blueberry', quantity: 2 },
-        { name: 'Brownie Cube', quantity: 2 },
-      ]
-    },
-  ]);
+  const { items, removeItem, updateItemQuantity } = useCart();
 
   const handleIncrease = (id: number) => {
-    setItems(
-      items.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
+    updateItemQuantity(id, items.find(item => item.id === id)!.quantity + 1);
   };
 
   const handleDecrease = (id: number) => {
-    setItems(
-      items.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
+    const item = items.find(item => item.id === id);
+    if (item && item.quantity > 1) {
+      updateItemQuantity(id, item.quantity - 1);
+    }
   };
 
   const handleRemove = (id: number) => {
-    setItems(items.filter((item) => item.id !== id));
+    removeItem(id);
   };
 
   const subtotal = items.reduce(
@@ -78,23 +42,28 @@ const Cart: React.FC = () => {
         <h1 className="text-[26px] font-semibold mb-8 mt-8">Shopping Cart</h1>
         <div className="flex">
           <div className="w-3/4">
-            {items.map((item) => (
-              <CartItem
-                key={item.id}
-                {...item}
-                onIncrease={() => handleIncrease(item.id)}
-                onDecrease={() => handleDecrease(item.id)}
-                onRemove={() => handleRemove(item.id)}
-              />
-            ))}
-
+            {items.length > 0 ? (
+              items.map((item) => (
+                <CartItem
+                  key={item.id}
+                  {...item}
+                  onIncrease={() => handleIncrease(item.id)}
+                  onDecrease={() => handleDecrease(item.id)}
+                  onRemove={() => handleRemove(item.id)}
+                />
+              ))
+            ) : (
+              <p>No items in the cart.</p>
+            )}
           </div>
           <div className="w-[500px] h-full p-4 border ml-5">
             <div className="flex justify-between flex items-center">
               <h2 className="text-[18px] font-bold mb-4 mt-[20px]">Summary</h2>
 
               <div className="px-[8px] py-[0.5px] bg-[#E06386] rounded">
-                <span className="text-[14px] text-white">2</span>
+                <span className="text-[14px] text-white">
+                  {items.length}
+                </span>
               </div>
             </div>
 

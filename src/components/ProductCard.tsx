@@ -1,4 +1,7 @@
+// ProductCard.tsx
+import React from 'react';
 import { Link } from "react-router-dom";
+import { useCart } from '../components/CartContext';
 
 const ProductCard = ({
   id,
@@ -13,6 +16,22 @@ const ProductCard = ({
   category: string;
   imgUrl: string;
 }) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    const item = {
+      id: parseInt(id), // Ensure the id is in the correct format if needed
+      image: imgUrl,
+      name,
+      size: '1/2 pound', // Fixed size as per the requirement
+      productId: id,
+      quantity: 1, // Set default quantity to 1
+      price,
+      details: 'Details about the product' // You can replace this with actual details if needed
+    };
+    addToCart(item);
+  };
+
   return (
     <div className="mb-[50px]">
       <Link to="/product" state={{ id, name, price, category, imgUrl }}>
@@ -23,7 +42,6 @@ const ProductCard = ({
         />
       </Link>
       <div className="pt-3 flex justify-between w-[295px]">
-        {/* category of cake */}
         <div className="inline-flex items-center border border-[#D63484] rounded-[20px] h-[35px] mb-2 px-4">
           <img src="/Tag.png" alt="Tag" className="h-[18px] w-[18px] mr-2" />
           <p className="text-[12px] text-[#D63484]">{category}</p>
@@ -36,7 +54,10 @@ const ProductCard = ({
           <h2 className="mt-4 text-[14px] font-semibold mb-2">{name}</h2>
           <p className="mt-4 text-[14px]">{price} THB</p>
         </div>
-        <button className="pl-5 pr-5 flex justify-between items-center mt-10 bg-[#FFE5E8] text-[12px] text-[#503C3C] hover:bg-[#E06386] hover:text-white rounded h-[35px] w-[90px] rounded-[20px] border-[1px] border-[#503C3C]">
+        <button
+          onClick={handleAddToCart} // Add click handler
+          className="pl-5 pr-5 flex justify-between items-center mt-10 bg-[#FFE5E8] text-[12px] text-[#503C3C] hover:bg-[#E06386] hover:text-white rounded h-[35px] w-[90px] rounded-[20px] border-[1px] border-[#503C3C]"
+        >
           <img src="/Add.png" alt="Add" className="h-[15px]" />
           ADD
         </button>

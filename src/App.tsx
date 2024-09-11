@@ -1,8 +1,7 @@
-// import './App.css'
+// App.tsx
 import {
   createBrowserRouter,
   RouterProvider,
-  Link,
 } from "react-router-dom";
 import Landing from './pages/Landing';
 import Category from './pages/Category';
@@ -21,79 +20,30 @@ import Cart from "./pages/Cart";
 import WriteOnCake from "./pages/WriteOnCake";
 import Decorate from "./pages/Decorate";
 import Payment from "./pages/Payment";
+import { CartProvider } from "./components/CartContext"; // นำเข้า CartProvider
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Landing key="landing" />,
-  },
-  {
-    path: "/category",
-    element: <Category key="category" />,
-  },
-  {
-    path: "/design",
-    element: <DesignYourCake key="design" />,
-  },
-  {
-    path: "/reviews",
-    element: <Reviews key="reviews" />,
-  },
-  {
-    path: "/login",
-    element: <Login key="login" />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp key="signup" />,
-  },
-  {
-    path: "/select",
-    element: <SelectYourCake key="select" />,
-  },
-  {
-    path: "/password",
-    element: <Password key="password" />,
-  },
-  {
-    path: "/newpassword",
-    element: <NewPassword key="newpassword" />,
-  },
-  {
-    path: "/resetpassword",
-    element: <ResetPassword key="resetpassword" />,
-  },
-  {
-    path: "/product",
-    element: <Product key="product" />,
-  },
-  {
-    path: "/account",
-    element: <Account key="account" />,
-  },
-  {
-    path: "/order",
-    element: <Order key="order" />,
-  },
-  {
-    path: "/cart",
-    element: <Cart key="cart" />,
-  },
-  {
-    path: "/write",
-    element: <WriteOnCake key="write" />,
-  },
-
-  {
-    path: "/decorate",
-    element: <Decorate key="decorate" />,
-  },
-
-  {
-    path: "/payment",
-    element: <Payment key="payment" />,
-  },
+  { path: "/", element: <Landing key="landing" /> },
+  { path: "/category", element: <Category key="category" /> },
+  { path: "/design", element: <DesignYourCake key="design" /> },
+  { path: "/reviews", element: <Reviews key="reviews" /> },
+  { path: "/login", element: <Login key="login" /> },
+  { path: "/signup", element: <SignUp key="signup" /> },
+  { path: "/select", element: <SelectYourCake key="select" /> },
+  { path: "/password", element: <Password key="password" /> },
+  { path: "/newpassword", element: <NewPassword key="newpassword" /> },
+  { path: "/resetpassword", element: <ResetPassword key="resetpassword" /> },
+  { path: "/product", element: <Product key="product" /> },
+  { path: "/account", element: <Account key="account" /> },
+  { path: "/order", element: <Order key="order" /> },
+  { path: "/cart", element: <Cart key="cart" /> },
+  { path: "/write", element: <WriteOnCake key="write" /> },
+  { path: "/decorate", element: <Decorate key="decorate" /> },
+  { path: "/payment", element: <Payment key="payment" /> },
 ]);
 
-
-export const App = () => <RouterProvider router={router}/>
+export const App = () => (
+  <CartProvider>
+    <RouterProvider router={router} />
+  </CartProvider>
+);
