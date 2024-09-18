@@ -8,7 +8,7 @@ const DesignYourCake = () => {
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar/>
+          <NavBar onSearch={() => {}}/>
         </div>
       </div>
       
@@ -16,14 +16,14 @@ const DesignYourCake = () => {
         Design your cake (option)
       </p>
 
-      <div className="mb-[90px] flex justify-between">
-        <div className="ml-20 h-[415px] w-[631px] relative">
-          <img
-            src="/DesignYourCake1.png"
-            alt="DesignYourCake1"
-            className="rounded-[20px] w-full h-full object-cover"/>
-            
-          <div className="ml-10 mt-10 absolute top-0 left-0 w-full h-full flex flex-col">
+      <div className="ml-[65px] mr-[65px] mb-20 relative flex justify-center">
+        <img
+          src="/DesignYourCake.png"
+          alt="DesignYourCake1"
+          className="w-full object-cover border border-white border-[10px]"/>
+          
+        <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-between">
+          <div className="ml-10 mt-10 flex flex-col">
             <span className="text-[25px] font-bold text-white drop-shadow-lg">
               Decorate the cake
             </span>
@@ -35,43 +35,19 @@ const DesignYourCake = () => {
             </span>
             
             <a href="/select">
-               <button className="mt-[36px] bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[35px] w-[180px]">
-                 ORDER NOW
-               </button>
-            </a>
-
-            <span className="text-[10px] mt-[150px] text-black">
-                By Drag and Drop method
-            </span>
-
-          </div>
-        </div>
-
-        <div className="mr-20 h-[415px] w-[631px] relative">
-          <img
-            src="/DesignYourCake2.png"
-            alt="DesignYourCake2"
-            className="rounded-[20px] w-full h-full object-cover"/>
-            
-          <div className="ml-10 mt-10 absolute top-40 right-10 items-end w-full h-full flex flex-col">
-            <span className="text-[25px] text-[#E06386] font-bold text-white drop-shadow-lg">
-              Write a
-            </span>
-            <span className="text-[25px] text-[#E06386] font-bold text-white drop-shadow-lg">
-              message on
-            </span>
-            <span className="text-[25px] text-[#E06386] font-bold text-white drop-shadow-lg">
-              the Cake
-            </span>
-            
-            <a href="/select">
-               <button className="mt-[36px] bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[35px] w-[180px]">
-                 ORDER NOW
-               </button>
+              <button className="mt-[36px] bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[35px] w-[180px]">
+                ORDER NOW
+              </button>
             </a>
           </div>
+
+          {/* Text at the bottom of the image */}
+          <span className="text-[10px] mb-10 ml-10 text-black">
+            By Drag and Drop method
+          </span>
         </div>
       </div>
+
       <Footer/>
       <Copyright/>
     </div>

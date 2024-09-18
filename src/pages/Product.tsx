@@ -10,16 +10,10 @@ import { useCart } from "../components/CartContext";
 
 const Product: React.FC = () => {
   const location = useLocation();
-  const {
-    id,
-    name,
-    price: locationPrice,
-    category,
-    imgUrl,
-  } = location.state || {};
+  const { id, name, price: locationPrice, category, imgUrl } = location.state || {};
 
   const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>([]);
-  const { addToCart } = useCart(); // Access addToCart from context
+  const { items, updateItemQuantity, addToCart } = useCart(); // Access addToCart from context
 
   useEffect(() => {
     if (category) {
@@ -27,14 +21,15 @@ const Product: React.FC = () => {
     }
   }, [category]);
 
+  
+
   const fetchRelatedProducts = async (category: string) => {
     try {
       const response = await axios.get("http://localhost:3001/api/v1/products");
       const products = response.data.data;
       // Filter products by category and exclude the current product
       const filteredProducts = products.filter(
-        (product: ProductItem) =>
-          product.category === category && product.id !== id
+        (product: ProductItem) => product.category === category && product.id !== id
       );
 
       const shuffled = filteredProducts.sort(() => 0.5 - Math.random());
@@ -48,12 +43,15 @@ const Product: React.FC = () => {
 
   // Renamed to avoid conflict
   const [quantity, setQuantity] = useState<number>(1);
-  const [currentPrice, setCurrentPrice] = useState<number>(
-    locationPrice || 1250
-  );
+  const [currentPrice, setCurrentPrice] = useState<number>(locationPrice || 1250);
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
 
-  const incrementQuantity = () => setQuantity(quantity + 1);
+  const incrementQuantity = () => {
+    if (quantity < 5) {
+      setQuantity(quantity + 1);
+    }
+  };
+
   const decrementQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
@@ -74,23 +72,28 @@ const Product: React.FC = () => {
       return;
     }
     const size = sizes[selectedSize];
-    addToCart({
-      id,
-      image: imgUrl,
-      name,
-      size: size.weight,
-      productId: id.toString(),
-      quantity,
-      price: currentPrice,
-      details: `Size: ${size.weight}`,
-    });
+    const item = items.find(item => item.id === id);
+    if (item) {
+      updateItemQuantity(item.productId, item.quantity + quantity);
+    } else {
+      addToCart({
+        id,
+        image: imgUrl,
+        name,
+        size: size.weight,
+        productId: id.toString(),
+        quantity,
+        price: currentPrice * quantity,  // Update total price based on quantity
+        details: `Size: ${size.weight}`,
+      });
+    }
   };
 
   return (
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full">
-          <NavBar />
+        <NavBar onSearch={() => {}}/>
         </div>
       </div>
 
@@ -123,9 +126,7 @@ const Product: React.FC = () => {
             </div>
 
             <div className="mb-10">
-              <h2 className="text-lg font-semibold mb-2 text-[16px]">
-                Select size
-              </h2>
+              <h2 className="text-lg font-semibold mb-2 text-[16px]">Select size</h2>
               <div className="flex space-x-4">
                 {sizes.map((size, index) => (
                   <button
@@ -140,42 +141,30 @@ const Product: React.FC = () => {
                       setSelectedSize(index);
                     }}
                   >
-                    <span className="text-[14px] font-semibold">
-                      {size.weight}
-                    </span>
+                    <span className="text-[14px] font-semibold">{size.weight}</span>
                     <br />
-                    <span className="text-[12px]">
-                      For {size.servings} servings
-                    </span>
+                    <span className="text-[12px]">For {size.servings} servings</span>
                     <br />
-                    <span className="text-[12px] font-semibold">
-                      {size.price} THB
-                    </span>
+                    <span className="text-[12px] font-semibold">{size.price} THB</span>
                   </button>
                 ))}
               </div>
             </div>
             <div className="mb-10">
-              <h2 className="text-lg font-semibold mb-3 text-[16px]">
-                Writing on the cake
-              </h2>
+              <h2 className="text-lg font-semibold mb-3 text-[16px]">Writing on the cake</h2>
 
               <p className="text-[13px] mb-5 text-[#666666]">
                 (You can write on the cake | Optional)
               </p>
               <textarea
                 className="w-full border-[1px] border-gray-300 p-5 rounded-lg text-[14px]"
-                placeholder="100 characters"
+                placeholder="20 characters"
                 maxLength={100}
               ></textarea>
             </div>
             <div className="flex justify-between items-center mb-4">
-              <span className="text-lg font-semibold text-[16px]">
-                SUBTOTAL
-              </span>
-              <span className="text-lg font-semibold">
-                {currentPrice * quantity} THB
-              </span>
+              <span className="text-lg font-semibold text-[16px]">SUBTOTAL</span>
+              <span className="text-lg font-semibold">{currentPrice * quantity} THB</span>
             </div>
             <div className="items-center space-x-7">
               <button

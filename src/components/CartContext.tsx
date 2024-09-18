@@ -1,8 +1,7 @@
-// CartContext.tsx
-import React, { createContext, useState, ReactNode, useContext } from 'react';
+import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
 
 interface CartItem {
-  id: number;
+  id: string;
   image: string;
   name: string;
   size: string;
@@ -15,27 +14,52 @@ interface CartItem {
 interface CartContextType {
   items: CartItem[];
   addToCart: (item: CartItem) => void;
-  removeItem: (id: number) => void;
-  updateItemQuantity: (id: number, quantity: number) => void;
+  removeItem: (id: string) => void;
+  updateItemQuantity: (id: string, quantity: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
+const CART_STORAGE_KEY = 'cartItems';
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
+  // Load cart items from localStorage when the component mounts
+  useEffect(() => {
+    const storedItems = sessionStorage.getItem(CART_STORAGE_KEY);
+    if (storedItems) {
+      setItems(JSON.parse(storedItems));
+    }
+  }, []);
+
+  // Save cart items to localStorage whenever items change
+  useEffect(() => {
+    sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+  }, [items]);
+
   const addToCart = (item: CartItem) => {
-    setItems((prevItems) => [...prevItems, item]);
+    setItems((prevItems) => {
+      const existingItem = prevItems.find(i => i.id === item.id);
+      if (existingItem) {
+        // Update quantity if item already exists, with a max limit of 5
+        const newQuantity = Math.min(existingItem.quantity + 1, 5);
+        return prevItems.map(i =>
+          i.id === item.id ? { ...i, quantity: newQuantity } : i
+        );
+      }
+      // Add new item if it doesn't exist, initializing quantity to 1
+      return [...prevItems, { ...item, quantity: 1 }];
+    });
   };
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     setItems((prevItems) => prevItems.filter(item => item.id !== id));
   };
 
-  const updateItemQuantity = (id: number, quantity: number) => {
+  const updateItemQuantity = (id: string, quantity: number) => {
     setItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === id ? { ...item, quantity } : item
+        item.id === id ? { ...item, quantity: Math.min(quantity, 5) } : item
       )
     );
   };

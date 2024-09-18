@@ -10,31 +10,35 @@ import { useCart } from '../components/CartContext';
 const Cart: React.FC = () => {
   const { items, removeItem, updateItemQuantity } = useCart();
 
-  const handleIncrease = (id: number) => {
-    updateItemQuantity(id, items.find(item => item.id === id)!.quantity + 1);
+  const handleIncrease = (productId: string) => {
+    updateItemQuantity(productId, items.find(item => item.productId === productId)!.quantity + 1);
   };
 
-  const handleDecrease = (id: number) => {
-    const item = items.find(item => item.id === id);
+  const handleDecrease = (productId: string) => {
+    const item = items.find(item => item.id === productId);
     if (item && item.quantity > 1) {
-      updateItemQuantity(id, item.quantity - 1);
+      updateItemQuantity(productId, item.quantity - 1);
     }
   };
 
-  const handleRemove = (id: number) => {
-    removeItem(id);
+  const handleRemove = (productId: string) => {
+    removeItem(productId);
   };
 
   const subtotal = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
+  
+  // รวม VAT 7% โดยตรงกับ subtotal
+  const totalWithVAT = (subtotal * 1.07).toFixed(2);
+  
 
   return (
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar />
+        <NavBar onSearch={() => {}}/>
         </div>
       </div>
 
@@ -47,8 +51,8 @@ const Cart: React.FC = () => {
                 <CartItem
                   key={item.id}
                   {...item}
-                  onIncrease={() => handleIncrease(item.id)}
-                  onDecrease={() => handleDecrease(item.id)}
+                  onIncrease={() => handleIncrease(item.productId)}
+                  onDecrease={() => handleDecrease(item.productId)}
                   onRemove={() => handleRemove(item.id)}
                 />
               ))
@@ -87,7 +91,7 @@ const Cart: React.FC = () => {
 
             <div className="flex justify-between font-bold mb-4 mt-4">
               <span className="text-[14px]">Subtotal</span>
-              <span className="text-[14px]">{subtotal} THB</span>
+              <span className="text-[14px]">{totalWithVAT} THB</span>
             </div>
 
             <div className="border border-[0.5px] border-solid border-[#666666] border-opacity-50 w-full h-[0.5px] mb-4" />

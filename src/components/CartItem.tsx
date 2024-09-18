@@ -17,6 +17,7 @@ interface CartItemProps {
   onDecrease: () => void;
   onRemove: () => void;
 }
+
 const CartItem: React.FC<CartItemProps> = ({
   image,
   name,
@@ -34,10 +35,19 @@ const CartItem: React.FC<CartItemProps> = ({
   onRemove,
 }) => {
   const [isOptionSelected, setIsOptionSelected] = useState(false);
+
+  const handleIncrease = () => {
+    if (quantity < 5) {
+      onIncrease();
+    } else {
+      alert("You cannot increase the quantity beyond 5.");
+    }
+  };
+
   return (
     <div className="flex justify-between p-4 border mb-3">
-        <button onClick={onRemove} className="text-pink-500">
-       <img src="/Bin.png" className="w-8 mr-4"></img>
+      <button onClick={onRemove} className="text-pink-500">
+        <img src="/Bin.png" className="w-8 mr-4" alt="Remove" />
       </button>
       <img
         src={image}
@@ -51,13 +61,13 @@ const CartItem: React.FC<CartItemProps> = ({
           <p className="text-[#D63484] text-[13px] font-semibold">Detail</p>
         )}
         <p className="text-[12px]">{shape}</p>
-        <p className="text-[12px]">Size : {size}</p>
+        <p className="text-[12px]">Size: {size}</p>
         <p className="text-[12px]">{flavour}</p>
 
         <div className="flex items-center pt-5">
           <button
             onClick={onDecrease}
-            className="font-light px-2 py-[1px] bg-[#FFE5E8] border-l-[0.8px] border-t-[0.8px] border-b-[0.8px]  border-[#666666] rounded-l-full"
+            className="font-light px-2 py-[1px] bg-[#FFE5E8] border-l-[0.8px] border-t-[0.8px] border-b-[0.8px] border-[#666666] rounded-l-full"
           >
             -
           </button>
@@ -65,7 +75,7 @@ const CartItem: React.FC<CartItemProps> = ({
             {quantity}
           </span>
           <button
-            onClick={onIncrease}
+            onClick={handleIncrease}
             className="font-light px-2 py-[1px] bg-[#FFE5E8] border-r-[0.8px] border-t-[0.8px] border-b-[0.8px] border-[#666666] rounded-r-full"
           >
             +
@@ -74,8 +84,7 @@ const CartItem: React.FC<CartItemProps> = ({
       </div>
 
       <div className="flex-1">
-
-      <div className="space-y-2">
+        <div className="space-y-2">
           {topping && (
             <p className="text-[#D63484] mt-16 text-[12px] font-semibold">
               Add Toppings
@@ -89,17 +98,10 @@ const CartItem: React.FC<CartItemProps> = ({
               </li>
             ))}
           </ul>
-      </div>
+        </div>
 
-        {/* {
-            if options is true 
-            return p
-            else return null
-
-            options  ? <p></p> : null
-        } */}
-          {options && (
-            <div className="flex-1 space-y-2">
+        {options && (
+          <div className="flex-1 space-y-2">
             <p className="text-[#D63484] mt-16 font-semibold text-[12px]">Optional</p>
             <div className="flex items-center">
               <input 
@@ -110,19 +112,17 @@ const CartItem: React.FC<CartItemProps> = ({
               />
               <p className="text-[12px]">{options}</p>
             </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
 
       <div className="space-y-[150px]">
         <div className="border rounded-full p-1 w-[70px] mt-5 flex justify-center items-center">
           <p className="text-[12px]">{productId}</p>
         </div>
-
         <p className="font-semibold text-[14px] ml-3">{price} THB</p>
       </div>
     </div>
-
   );
 };
 

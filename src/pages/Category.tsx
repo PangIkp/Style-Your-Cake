@@ -20,6 +20,7 @@ const Category = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedPriceRange, setSelectedPriceRange] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("asc");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     const loadImage = (imageUrl: string) => {
@@ -33,28 +34,28 @@ const Category = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3001/api/v1/products"
-        );
+        const response = await axios.get("http://localhost:3001/api/v1/products");
         const products = response.data.data;
-
-        // Preload all product images
+    
+        // Preload all images
         const imagePreloadPromises = products.map((product: ProductItem) =>
-          loadImage(product.productPic)
+          loadImage(product.productPic).catch((err) => {
+            console.error(`Error loading image for product ${product.id}:`, err);
+          })
         );
-
+    
         // Wait for all images to be preloaded
         await Promise.all(imagePreloadPromises);
-
-        // Once images are preloaded, update the state
+    
+        // Update state after preload
         setLoading(false);
         setCakeDetail(products);
-        setFilteredProducts(products); // Display all products by default
+        setFilteredProducts(products); // Show all products by default
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+    
     fetchData();
   }, []);
 
@@ -118,13 +119,21 @@ const Category = () => {
     setFilteredProducts(sortedProducts);
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    const filtered = cakeDetail.filter((product) =>
+      product.productName.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar />
+          <NavBar onSearch={handleSearch} />
         </div>
 
         <div className="flex justify-between items-center p-10 ml-10">

@@ -16,20 +16,24 @@ const ProductCard = ({
   category: string;
   imgUrl: string;
 }) => {
-  const { addToCart } = useCart();
+  const { items, addToCart, updateItemQuantity } = useCart();
 
   const handleAddToCart = () => {
-    const item = {
-      id: parseInt(id), // Ensure the id is in the correct format if needed
-      image: imgUrl,
-      name,
-      size: '1/2 pound', // Fixed size as per the requirement
-      productId: id,
-      quantity: 1, // Set default quantity to 1
-      price,
-      details: 'Details about the product' // You can replace this with actual details if needed
-    };
-    addToCart(item);
+    const item = items.find(item => item.id === id);
+    if (item) {
+      updateItemQuantity(item.productId, item.quantity + 1);
+    } else {
+      addToCart({
+        id,
+        image: imgUrl,
+        name,
+        size: '1/2 pound',
+        productId: id.toString(),
+        quantity: 1,
+        price: price,  // Update total price based on quantity
+        details: `Size: 1/2 pound`,
+      });
+    }
   };
 
   return (
