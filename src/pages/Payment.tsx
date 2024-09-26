@@ -1,54 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Copyright from "../components/Copyright";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import SummaryItem from "./Summary";
+import { CartItemType } from "../components/CartContext";
 
 const Payment: React.FC = () => {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "Celebration Delight",
-      size: "1 pound",
-      productId: "BC-01",
-      quantity: 1,
-      price: 1250,
-      details: "Size : 1 pound",
-      options: "Writing on the cake",
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1562440499-64c9a111f713?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "Design your cake",
-      size: "1 pound",
-      productId: "DC-01",
-      quantity: 1,
-      price: 723,
-      details: "Shape : Default (Round)",
-      shape: "Shape : Round",
-      flavour: "Flavour : Chocolate",
-      topping: [
-        { name: "Strawberry", quantity: 2 },
-        { name: "Blueberry", quantity: 2 },
-        { name: "Brownie Cube", quantity: 2 },
-      ],
-    },
-  ]);
+  const location = useLocation();
+  const [items, setItems] = useState([]);
+  const [subtotal, setSubtotal] = useState(0);
+  const [totalWithVAT, setTotalWithVAT] = useState(0);
+
+  useEffect(() => {
+    // ตรวจสอบว่า location.state มีข้อมูลหรือไม่
+    if (location.state) {
+      const { items, subtotal, totalWithVAT } = location.state;
+      setItems(items);
+      setSubtotal(subtotal);
+      setTotalWithVAT(totalWithVAT);
+    }
+  }, [location.state]);
+
 
   return (
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar onSearch={() => {}}/>
+          <NavBar onSearch={() => {}} />
         </div>
       </div>
 
       <div className="flex space-x-10 pl-20 pr-20 pt-10 pb-10">
-        <div className="w-2/3">
+        <div className="w-3/5">
           {/* ข้อมูลสำหรับการกรอกข้อมูลการจัดส่งและการชำระเงิน */}
           <div className="">
             <h1 className="text-[26px] font-semibold mb-8">Checkout</h1>
@@ -180,50 +165,58 @@ const Payment: React.FC = () => {
           </Link>
         </div>
 
-        <div className="w-1/3 h-full border border-gray-300 shadow-md rounded p-8 sticky top-10">
-          <div className="">
-            <div className="">
-              <h2 className="font-semibold text-[16px]">In your Cart</h2>
+        {/*ข้อมูลจากตระกร้าสินค้า*/}
+        <div className="w-2/5">
+          <div className="w-full h-auto border border-gray-300 shadow-md rounded p-5 sticky top-10">
+            <h2 className="font-semibold text-[16px]">In your Cart</h2>
+            <div className="mt-2 bg-[#E06386] p-1 w-[95px] rounded text-center">
+              <p className="text-white text-[13px] font-medium">
+                Quantity : {" "}
+                {items.reduce(
+                  (acc: number, item: CartItemType) => acc + item.quantity,
+                  0
+                )}
+              </p>
+            </div>
 
-              <div className="mt-2 bg-[#E06386] p-1 w-[95px] rounded text-center">
-                <p className="text-white text-[13px] font-medium">
-                  Quantity : 2
-                </p>
-              </div>
-
-              <div className="mt-4">
-                {items.map((item) => (
+            <div className="mt-4">
+              {items.map(
+                (
+                  item: CartItemType // Specify the type for item
+                ) => (
                   <SummaryItem key={item.id} {...item} />
-                ))}
+                )
+              )}
+            </div>
+            <div className="mt-10 space-y-2">
+              <p className="font-semibold text-[15px]">Price</p>
+              <div className="flex justify-between mb-2">
+                <span className="text-[14px]">Subtotal</span>
+                <span className="text-[14px]">{subtotal} THB</span>
               </div>
 
-              <div className="mt-10 space-y-2">
-                <p className="font-semibold text-[15px]">Price</p>
-
-                <div className="flex justify-between mb-2">
-                  <span className="text-[14px]">Subtotal</span>
-                  <span className="text-[14px]">1973 THB</span>
-                </div>
-
-                <div className="flex justify-between mb-2">
-                  <span className="text-[14px]">Shipping fee</span>
-                  <span className="text-[14px]">300 THB</span>
-                </div>
-
-                <div className="flex justify-between mb-2">
-                  <span className="text-[14px]">Vat</span>
-                  <span className="text-[14px]">7%</span>
-                </div>
-
-                <div className="border border-[0.5px] border-solid border-[#666666] border-opacity-50 w-full h-[0.5px]" />
-
-                <div className="flex justify-between mb-2">
-                  <span className="font-semibold text-[15px]">Total</span>
-                  <span className="font-semibold text-[14px]">2273 THB</span>
-                </div>
-
-                <div className="border border-[0.5px] border-solid border-[#666666] border-opacity-50 w-full h-[0.5px]" />
+              <div className="flex justify-between mb-2">
+                <span className="text-[14px]">Shipping fee</span>
+                <span className="text-[14px">300 THB</span>{" "}
+                {/* Adjust if necessary */}
               </div>
+
+              <div className="flex justify-between mb-2">
+                <span className="text-[14px]">Vat</span>
+                <span className="text-[14px]">7%</span>
+              </div>
+
+              <div className="border border-[0.5px] border-solid border-[#666666] border-opacity-50 w-full h-[0.5px]" />
+
+              <div className="flex justify-between mb-2">
+                <span className="font-semibold text-[15px]">Total</span>
+                <span className="font-semibold text-[14px]">
+                  {totalWithVAT} THB
+                </span>{" "}
+                {/* Display total */}
+              </div>
+
+              <div className="border border-[0.5px] border-solid border-[#666666] border-opacity-50 w-full h-[0.5px]" />
             </div>
           </div>
         </div>

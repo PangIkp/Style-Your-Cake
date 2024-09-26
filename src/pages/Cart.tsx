@@ -1,21 +1,42 @@
 // Cart.tsx
-import React from 'react';
+import React from "react";
 import CartItem from "../components/CartItem";
 import Copyright from "../components/Copyright";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
-import { Link } from "react-router-dom";
-import { useCart } from '../components/CartContext';
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../components/CartContext";
 
 const Cart: React.FC = () => {
   const { items, removeItem, updateItemQuantity } = useCart();
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    const subtotal = items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+    const totalWithVAT = (subtotal * 1.07).toFixed(2);
+    const shippingFee = 300; // Example shipping fee
+
+    navigate("/payment", {
+      state: {
+        items,
+        subtotal,
+        totalWithVAT: parseFloat(totalWithVAT) + shippingFee, // Calculate total with shipping fee
+      },
+    });
+  };
 
   const handleIncrease = (productId: string) => {
-    updateItemQuantity(productId, items.find(item => item.productId === productId)!.quantity + 1);
+    updateItemQuantity(
+      productId,
+      items.find((item) => item.productId === productId)!.quantity + 1
+    );
   };
 
   const handleDecrease = (productId: string) => {
-    const item = items.find(item => item.id === productId);
+    const item = items.find((item) => item.id === productId);
     if (item && item.quantity > 1) {
       updateItemQuantity(productId, item.quantity - 1);
     }
@@ -29,16 +50,15 @@ const Cart: React.FC = () => {
     (acc, item) => acc + item.price * item.quantity,
     0
   );
-  
+
   // รวม VAT 7% โดยตรงกับ subtotal
   const totalWithVAT = (subtotal * 1.07).toFixed(2);
-  
 
   return (
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-        <NavBar onSearch={() => {}}/>
+          <NavBar onSearch={() => {}} />
         </div>
       </div>
 
@@ -65,9 +85,7 @@ const Cart: React.FC = () => {
               <h2 className="text-[18px] font-bold mb-4 mt-[20px]">Summary</h2>
 
               <div className="px-[8px] py-[0.5px] bg-[#E06386] rounded">
-                <span className="text-[14px] text-white">
-                  {items.length}
-                </span>
+                <span className="text-[14px] text-white">{items.length}</span>
               </div>
             </div>
 
@@ -96,11 +114,14 @@ const Cart: React.FC = () => {
 
             <div className="border border-[0.5px] border-solid border-[#666666] border-opacity-50 w-full h-[0.5px] mb-4" />
 
-            <Link to="/payment">
-              <button className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[13px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] w-full h-[35px]">
+            {/* <Link to="/payment"> */}
+              <button
+                onClick={handleCheckout} // Use handleCheckout here
+                className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[13px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] w-full h-[35px]"
+              >
                 CHECKOUT
               </button>
-            </Link>
+            {/* </Link> */}
           </div>
         </div>
       </div>

@@ -16,25 +16,7 @@ const ProductCard = ({
   category: string;
   imgUrl: string;
 }) => {
-  const { items, addToCart, updateItemQuantity } = useCart();
-
-  const handleAddToCart = () => {
-    const item = items.find(item => item.id === id);
-    if (item) {
-      updateItemQuantity(item.productId, item.quantity + 1);
-    } else {
-      addToCart({
-        id,
-        image: imgUrl,
-        name,
-        size: "Size: 1/2 pound",
-        productId: id.toString(),
-        quantity: 1,
-        price: price,  // Update total price based on quantity
-        details: "",
-      });
-    }
-  };
+  
 
   return (
     <div className="mb-[50px]">
@@ -58,13 +40,6 @@ const ProductCard = ({
           <h2 className="mt-4 text-[14px] font-semibold mb-2">{name}</h2>
           <p className="mt-4 text-[14px]">{price} THB</p>
         </div>
-        <button
-          onClick={handleAddToCart} // Add click handler
-          className="pl-5 pr-5 flex justify-between items-center mt-10 bg-[#FFE5E8] text-[12px] text-[#503C3C] hover:bg-[#E06386] hover:text-white rounded h-[35px] w-[90px] rounded-[20px] border-[1px] border-[#503C3C]"
-        >
-          <img src="/Add.png" alt="Add" className="h-[15px]" />
-          ADD
-        </button>
       </div>
     </div>
   );

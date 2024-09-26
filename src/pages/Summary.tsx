@@ -28,15 +28,11 @@ const Summary: React.FC<SummaryItem> = ({
   flavour,
   topping,
 }) => {
-  const [isOptionSelected, setIsOptionSelected] = useState(false);
+  const [isDetailsSelected, setIsDetailsSelected] = useState(false);
 
   return (
     <div className="pb-2 pt-2 flex justify-start space-x-5">
-      <img
-        src={image}
-        alt={name}
-        className="w-[180px] h-[200px] border rounded-[20px]"
-      />
+      <img src={image} alt={name} className="w-[120px] border rounded-[10px]" />
 
       <div className="w-full">
         <div className="flex justify-between mt-6">
@@ -45,10 +41,9 @@ const Summary: React.FC<SummaryItem> = ({
         </div>
 
         <div>
-          {details && (
-            <p className="text-[#D63484] text-[13px] font-semibold">Detail</p>
-          )}
-          <p className="text-[12px]">Size : {size}</p>
+          <p className="text-[#D63484] text-[13px] font-semibold">Detail</p>
+          <p className="text-[12px]">{size}</p>
+          <p className="text-[12px]">Quantity : {quantity}</p>
         </div>
 
         <div className="">
@@ -67,19 +62,19 @@ const Summary: React.FC<SummaryItem> = ({
           </ul>
 
           <p className="text-[12px]"></p>
-          {options && (
+          {details && (
             <>
               <p className="text-[#D63484] mt-2 font-semibold text-[12px]">
                 Optional
               </p>
               <div className="flex items-center">
                 <input
-                  type="checkbox"
+                  type="checkbox" // ใช้ state เพื่อตรวจสอบว่า checkbox ถูกเลือกหรือไม่
                   checked={true}
-                  onChange={() => setIsOptionSelected(!isOptionSelected)}
+                  onChange={() => setIsDetailsSelected(!isDetailsSelected)} // อัปเดต state เมื่อมีการเปลี่ยนแปลง
                   className="mr-2"
                 />
-                <p className="text-[12px]">{options}</p>
+                <p className="text-[12px]">{details}</p>
               </div>
             </>
           )}

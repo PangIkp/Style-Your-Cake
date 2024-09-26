@@ -11,11 +11,22 @@ interface CartItem {
   details: string;
 }
 
+export interface CartItemType {
+  id: string;
+  productId: string;
+  name: string;
+  size : string;
+  price: number;
+  quantity: number;
+  details: string;
+  image: string;
+}
+
 interface CartContextType {
   items: CartItem[];
   addToCart: (item: CartItem) => void;
   removeItem: (id: string) => void;
-  updateItemQuantity: (id: string, quantity: number) => void;
+  updateItemQuantity: (id: string, quantity : number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
