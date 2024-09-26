@@ -15,6 +15,12 @@ const Product: React.FC = () => {
   const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>([]);
   const { items, updateItemQuantity, addToCart } = useCart(); // Access addToCart from context
 
+  const [message, setMessage] = useState(""); // State to store the message
+
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value); // Update state on user input
+  };  
+
   useEffect(() => {
     if (category) {
       fetchRelatedProducts(category);
@@ -80,12 +86,12 @@ const Product: React.FC = () => {
         id,
         image: imgUrl,
         name,
-        size: size.weight,
         productId: id.toString(),
         quantity,
         price: currentPrice * quantity,  // Update total price based on quantity
-        details: `Size: ${size.weight}`,
-      });
+        details: message ? `Message: ${message}` : "",  // Only add 'Message:' if message exists
+        size: `Size: ${size.weight}`, // Keep only this size property
+      });      
     }
   };
 
@@ -157,11 +163,14 @@ const Product: React.FC = () => {
                 (You can write on the cake | Optional)
               </p>
               <textarea
-                className="w-full border-[1px] border-gray-300 p-5 rounded-lg text-[14px]"
-                placeholder="20 characters"
-                maxLength={100}
-              ></textarea>
+              className="w-full border-[1px] border-gray-300 p-5 rounded-lg text-[14px]"
+              placeholder="20 characters"
+              maxLength={20}
+              value={message} // Bind the value to state
+              onChange={handleMessageChange} // Update the state when user types
+            ></textarea>
             </div>
+
             <div className="flex justify-between items-center mb-4">
               <span className="text-lg font-semibold text-[16px]">SUBTOTAL</span>
               <span className="text-lg font-semibold">{currentPrice * quantity} THB</span>

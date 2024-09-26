@@ -27,11 +27,11 @@ const ProductCard = ({
         id,
         image: imgUrl,
         name,
-        size: '1/2 pound',
+        size: "Size: 1/2 pound",
         productId: id.toString(),
         quantity: 1,
         price: price,  // Update total price based on quantity
-        details: `Size: 1/2 pound`,
+        details: "",
       });
     }
   };

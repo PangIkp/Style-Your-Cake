@@ -57,12 +57,11 @@ const CartItem: React.FC<CartItemProps> = ({
 
       <div className="ml-4 flex-1 mt-6 space-y-2">
         <h2 className="font-semibold text-[13px] mb-5">{name}</h2>
-        {details && (
-          <p className="text-[#D63484] text-[13px] font-semibold">Detail</p>
-        )}
+        <p className="text-[#D63484] text-[13px] font-semibold">Detail</p>
         <p className="text-[12px]">{shape}</p>
-        <p className="text-[12px]">Size: {size}</p>
+        <p className="text-[12px]">{size}</p>
         <p className="text-[12px]">{flavour}</p>
+        <p className="text-[12px]">{details}</p>
 
         <div className="flex items-center pt-5">
           <button

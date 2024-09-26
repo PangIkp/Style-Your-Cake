@@ -22,42 +22,6 @@ const Category = () => {
   const [sortBy, setSortBy] = useState<string>("asc");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  useEffect(() => {
-    const loadImage = (imageUrl: string) => {
-      return new Promise((resolve, reject) => {
-        const loadImg = new Image();
-        loadImg.src = imageUrl;
-        loadImg.onload = () => setTimeout(() => resolve(imageUrl), 2000);
-        loadImg.onerror = (err) => reject(err);
-      });
-    };
-
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/api/v1/products");
-        const products = response.data.data;
-    
-        // Preload all images
-        const imagePreloadPromises = products.map((product: ProductItem) =>
-          loadImage(product.productPic).catch((err) => {
-            console.error(`Error loading image for product ${product.id}:`, err);
-          })
-        );
-    
-        // Wait for all images to be preloaded
-        await Promise.all(imagePreloadPromises);
-    
-        // Update state after preload
-        setLoading(false);
-        setCakeDetail(products);
-        setFilteredProducts(products); // Show all products by default
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    
-    fetchData();
-  }, []);
 
   const handleChange = ({ category, priceRange }: FilterOptions) => {
     let filtered = cakeDetail;
@@ -126,6 +90,43 @@ const Category = () => {
     );
     setFilteredProducts(filtered);
   };
+
+  useEffect(() => {
+    const loadImage = (imageUrl: string) => {
+      return new Promise((resolve, reject) => {
+        const loadImg = new Image();
+        loadImg.src = imageUrl;
+        loadImg.onload = () => resolve(imageUrl); // Removed the timeout
+        loadImg.onerror = reject;
+      });
+    };
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/api/v1/products");
+        const products = response.data.data;
+    
+        // Preload all images
+        const imagePreloadPromises = products.map((product: ProductItem) =>
+          loadImage(product.productPic).catch((err) => {
+            console.error(`Error loading image for product ${product.id}:`, err);
+          })
+        );
+    
+        // Wait for all images to be preloaded
+        await Promise.all(imagePreloadPromises);
+    
+        // Update state after preload
+        setLoading(false);
+        setCakeDetail(products);
+        setFilteredProducts(products); // Show all products by default
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    
+    fetchData();
+  }, []);
 
   if (loading) return <div>Loading...</div>;
 
