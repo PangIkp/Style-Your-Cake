@@ -7,11 +7,56 @@ import { useLocation } from "react-router-dom";
 import SummaryItem from "./Summary";
 import { CartItemType } from "../components/CartContext";
 
+interface Tambon {
+  id: number;
+  zip_code: number;
+  name_th: string;
+  name_en: string;
+  amphure_id: number;
+}
+
+interface Amphure {
+  id: number;
+  name_th: string;
+  name_en: string;
+  province_id: number;
+  tambon: Tambon[];
+}
+
+interface Province {
+  id: number;
+  name_th: string;
+  name_en: string;
+  geography_id: number;
+  amphure: Amphure[];
+}
+
 const Payment: React.FC = () => {
   const location = useLocation();
   const [items, setItems] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
   const [totalWithVAT, setTotalWithVAT] = useState(0);
+  const [provinces, setProvinces] = useState<Province[]>([]);
+  const [selectedProvince, setSelectedProvince] = useState<Province | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<Amphure | null>(null);
+  const [subdistricts, setSubdistricts] = useState<Tambon[]>([]);
+  const [selectedSubdistrict, setSelectedSubdistrict] = useState<Tambon | null>(null);
+  const [postalCode, setPostalCode] = useState<string>("");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    province: '',
+    district: '',
+    subdistrict: '',
+  });
 
   useEffect(() => {
     // ตรวจสอบว่า location.state มีข้อมูลหรือไม่
@@ -23,6 +68,128 @@ const Payment: React.FC = () => {
     }
   }, [location.state]);
 
+  // ดึงข้อมูลจากลิ้ง JSON
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province_with_amphure_tambon.json")
+      .then((response) => response.json())
+      .then((data) => {
+        setProvinces(data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  const handleProvinceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const provinceId = parseInt(event.target.value);
+    const selectedProvinceData = provinces.find((p) => p.id === provinceId) || null;
+    setSelectedProvince(selectedProvinceData);
+    setSelectedDistrict(null); // Reset district
+    setSubdistricts([]); // Reset subdistricts
+    setSelectedSubdistrict(null);
+    setPostalCode(""); // Reset postal code
+
+    // Validate province selection
+    setErrors((prev) => ({ ...prev, province: selectedProvinceData ? "" : "Please select a province." }));
+  };
+
+  const handleDistrictChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (selectedProvince) {
+      const districtId = parseInt(event.target.value);
+      const selectedDistrictData = selectedProvince.amphure.find((d) => d.id === districtId) || null;
+      setSelectedDistrict(selectedDistrictData);
+      setSubdistricts(selectedDistrictData ? selectedDistrictData.tambon : []);
+      setSelectedSubdistrict(null);
+      setPostalCode("");
+
+      // Validate district selection
+      setErrors((prev) => ({ ...prev, district: selectedDistrictData ? "" : "Please select a district." }));
+    }
+  };
+
+  const handleSubdistrictChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (selectedDistrict) {
+      const subdistrictId = parseInt(event.target.value);
+      const selectedSubdistrictData = selectedDistrict.tambon.find((t) => t.id === subdistrictId) || null;
+      setSelectedSubdistrict(selectedSubdistrictData);
+      setPostalCode(selectedSubdistrictData ? selectedSubdistrictData.zip_code.toString() : "");
+
+      // Validate subdistrict selection
+      setErrors((prev) => ({ ...prev, subdistrict: selectedSubdistrictData ? "" : "Please select a subdistrict." }));
+    }
+  };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string) => {
+    const phoneRegex = /^[0-9]{10}$/; // เบอร์โทรควรเป็นตัวเลข 10 หลัก
+    return phoneRegex.test(phone);
+  };
+
+  const validateName = (name: string) => {
+    const nameRegex = /^[A-Za-z]+$/; // ชื่อควรเป็นตัวอักษรเท่านั้น
+    return nameRegex.test(name);
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    let formIsValid = true;
+    const newErrors = {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      province: '',
+      district: '',
+      subdistrict: '',
+    };
+
+    if (!firstName || !validateName(firstName)) {
+      newErrors.firstName =
+        "First name is required and should contain only letters";
+        formIsValid = false;
+    }
+
+    if (!lastName || !validateName(lastName)) {
+      newErrors.lastName =
+        "Last name is required and should contain only letters";
+        formIsValid = false;
+    }
+
+    if (!email || !validateEmail(email)) {
+      newErrors.email = "Please enter a valid email address";
+      formIsValid = false;
+    }
+
+    if (!phone || !validatePhone(phone)) {
+      newErrors.phone = "Please enter a valid phone number (10 digits)";
+      formIsValid = false;
+    }
+
+    if (!selectedProvince) {
+      newErrors.province = 'Please select a province';
+      formIsValid = false;
+    }
+
+    if (!selectedDistrict) {
+      newErrors.district = 'Please select a district';
+      formIsValid = false;
+    }
+
+    if (!selectedSubdistrict) {
+      newErrors.subdistrict = 'Please select a subdistrict';
+      formIsValid = false;
+    }
+
+
+    setErrors(newErrors);
+
+    if (formIsValid) {
+      alert("Form is valid and ready to submit!");
+      // ทำการ submit หรือดำเนินการต่อ
+    }
+  };
 
   return (
     <div>
@@ -47,30 +214,59 @@ const Payment: React.FC = () => {
             <p className="font-medium text-[14px] mb-5">Customer Information</p>
 
             <div className="space-y-4">
-              <div className="flex justify-between space-x-4">
-                <input
-                  type="text"
-                  placeholder="First name"
-                  className="text-[12px] w-full border rounded rounded-[7px] p-3"
-                />
-                <input
-                  type="text"
-                  placeholder="Last name"
-                  className="text-[12px] w-full border rounded rounded-[7px] p-3"
-                />
-              </div>
-
-              <div className="flex justify-between space-x-4">
-                <input
-                  type="text"
-                  placeholder="Email address"
-                  className="text-[12px] w-full border rounded rounded-[7px] p-3"
-                />
-                <input
-                  type="text"
-                  placeholder="Phone number"
-                  className="text-[12px] w-full border rounded rounded-[7px] p-3"
-                />
+              <div className="flex space-x-4">
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    placeholder="First name"
+                    className="text-[12px] w-full border rounded rounded-[7px] p-3"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                  {errors.firstName && (
+                    <p className="text-red-500 text-[10px] mt-1">
+                      {errors.firstName}
+                    </p>
+                  )}
+                  <input
+                    type="text"
+                    placeholder="Email address"
+                    className="text-[12px] w-full border rounded rounded-[7px] p-3 mt-2"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-[10px] mt-1">
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    placeholder="Last name"
+                    className="text-[12px] w-full border rounded rounded-[7px] p-3"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                  {errors.lastName && (
+                    <p className="text-red-500 text-[10px] mt-1">
+                      {errors.lastName}
+                    </p>
+                  )}
+                  <input
+                    type="text"
+                    placeholder="Phone number"
+                    className="text-[12px] w-full border rounded rounded-[7px] p-3 mt-2"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                  {errors.phone && (
+                    <p className="text-red-500 text-[10px] mt-1">
+                      {errors.phone}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -86,24 +282,76 @@ const Payment: React.FC = () => {
             ></textarea>
 
             <div className="space-y-4">
-              <div className="flex space-x-4">
-                <select className="text-gray-400 border text-[12px] rounded-[7px] p-3 w-full">
-                  <option>Province</option>
-                </select>
+              <div className="flex flex-wrap -mx-2">
+                {/* Column 1 */}
+                <div className="w-full sm:w-1/2 px-2 mb-4">
+        <select
+          className="text-gray-500 border text-[12px] rounded-[7px] p-3 w-full"
+          onChange={handleProvinceChange}
+          value={selectedProvince ? selectedProvince.id : ""}
+        >
+          <option value="">Province</option>
+          {provinces.map((province) => (
+            <option key={province.id} value={province.id}>
+              {province.name_th}
+            </option>
+          ))}
+        </select>
+        {errors.province && (
+          <p className="text-red-500 text-[10px] mt-1">{errors.province}</p>
+        )}
+      </div>
 
-                <select className="text-gray-400 border text-[12px] rounded-[7px] p-3 w-full">
-                  <option>District</option>
-                </select>
-              </div>
+      {/* Column 2 */}
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <select
+          className="text-gray-500 border text-[12px] rounded-[7px] p-3 w-full"
+          onChange={handleDistrictChange}
+          value={selectedDistrict ? selectedDistrict.id : ""}
+          disabled={!selectedProvince}
+        >
+          <option value="">District</option>
+          {selectedProvince &&
+            selectedProvince.amphure.map((district) => (
+              <option key={district.id} value={district.id}>
+                {district.name_th}
+              </option>
+            ))}
+        </select>
+        {errors.district && (
+          <p className="text-red-500 text-[10px] mt-1">{errors.district}</p>
+        )}
+      </div>
 
-              <div className="flex space-x-4">
-                <select className="text-gray-400 border text-[12px] rounded-[7px] p-3 w-full">
-                  <option>Subdistrict</option>
-                </select>
+      {/* Column 1 */}
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <select
+          className="text-gray-500 border text-[12px] rounded-[7px] p-3 w-full"
+          onChange={handleSubdistrictChange}
+          value={selectedSubdistrict ? selectedSubdistrict.id : ""}
+          disabled={!selectedDistrict}
+        >
+          <option value="">Subdistrict</option>
+          {subdistricts.map((subdistrict) => (
+            <option key={subdistrict.id} value={subdistrict.id}>
+              {subdistrict.name_th}
+            </option>
+          ))}
+        </select>
+        {errors.subdistrict && (
+          <p className="text-red-500 text-[10px] mt-1">{errors.subdistrict}</p>
+        )}
+      </div>
 
-                <select className="text-gray-400 border text-[12px] rounded-[7px] p-3 w-full">
-                  <option>Postal code</option>
-                </select>
+      {/* Postal Code */}
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <select
+          className="text-gray-500 border text-[12px] rounded-[7px] p-3 w-full"
+          disabled
+        >
+          <option>{postalCode || "Postal code"}</option>
+        </select>
+      </div>
               </div>
             </div>
 
@@ -115,7 +363,7 @@ const Payment: React.FC = () => {
               </div>
 
               <div className="flex space-x-4">
-                <div className="content-center space-y-4 bg-[#FFCCD2] bg-opacity-50 p-[80px] rounded rounded-[20px] text-center">
+                <div className="content-center space-y-4 bg-[#FFCCD2] bg-opacity-50 p-[60px] rounded rounded-[20px] text-center">
                   <img
                     src="/QrScan.png"
                     alt="Thai QR Payment"
@@ -124,7 +372,7 @@ const Payment: React.FC = () => {
                   <p className="font-medium">Pay by scanning here!</p>
                 </div>
 
-                <div className="content-center space-y-4 bg-[#FFCCD2] bg-opacity-50 p-[80px] rounded rounded-[20px] text-center">
+                <div className="content-center space-y-4 bg-[#FFCCD2] bg-opacity-50 p-[60px] rounded rounded-[20px] text-center">
                   <img
                     src="/QrLine.png"
                     alt="Send proof of payment online"
@@ -158,11 +406,12 @@ const Payment: React.FC = () => {
             </div>
           </div>
 
-          <Link to="/">
-            <button className="mt-5 mb-5 bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[40px] w-full">
-              Confirm transection
-            </button>
-          </Link>
+          <button
+            className="mt-5 mb-5 bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[40px] w-full"
+            onClick={handleSubmit}
+          >
+            Confirm transection
+          </button>
         </div>
 
         {/*ข้อมูลจากตระกร้าสินค้า*/}
@@ -171,7 +420,7 @@ const Payment: React.FC = () => {
             <h2 className="font-semibold text-[16px]">In your Cart</h2>
             <div className="mt-2 bg-[#E06386] p-1 w-[95px] rounded text-center">
               <p className="text-white text-[13px] font-medium">
-                Quantity : {" "}
+                Quantity :{" "}
                 {items.reduce(
                   (acc: number, item: CartItemType) => acc + item.quantity,
                   0
