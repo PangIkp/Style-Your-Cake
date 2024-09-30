@@ -53,13 +53,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const existingItem = prevItems.find(i => i.id === item.id);
       if (existingItem) {
         // Update quantity if item already exists, with a max limit of 5
-        const newQuantity = Math.min(existingItem.quantity + 1, 5);
+        const newQuantity = Math.min(existingItem.quantity + item.quantity, 5);
         return prevItems.map(i =>
           i.id === item.id ? { ...i, quantity: newQuantity } : i
         );
       }
       // Add new item if it doesn't exist, initializing quantity to 1
-      return [...prevItems, { ...item, quantity: 1 }];
+      return [...prevItems, { ...item, quantity: item.quantity }];
     });
   };
 

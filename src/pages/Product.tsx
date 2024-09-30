@@ -78,21 +78,21 @@ const Product: React.FC = () => {
       return;
     }
     const size = sizes[selectedSize];
-    const item = items.find(item => item.id === id);
-    if (item) {
-      updateItemQuantity(item.productId, item.quantity + quantity);
-    } else {
+    // const item = items.find(item => item.id === id);
+    // if (item) {
+      // updateItemQuantity(item.productId, item.quantity + quantity);
+    // } else {
       addToCart({
-        id,
+        id: `${id}(${size.weight})`,
         image: imgUrl,
         name,
         productId: id.toString(),
         quantity,
         price: currentPrice * quantity,  // Update total price based on quantity
-        details: message ? `Message: ${message}` : "",  // Only add 'Message:' if message exists
-        size: `Size: ${size.weight}`, // Keep only this size property
+        details: message ? `Message : ${message}` : "",  // Only add 'Message:' if message exists
+        size: `Size : ${size.weight}`, // Keep only this size property
       });      
-    }
+    // }
   };
 
   return (
