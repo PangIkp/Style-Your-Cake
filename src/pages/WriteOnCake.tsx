@@ -7,7 +7,7 @@ const WriteOnCake = () => {
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar />
+          <NavBar onSearch={() => {}}/>
         </div>
       </div>
 

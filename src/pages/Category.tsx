@@ -6,32 +6,135 @@ import Dropdown from "../components/Dropdown";
 import Footer from "../components/Footer";
 import Copyright from "../components/Copyright";
 import axios from "axios";
+import { ProductItem } from "../interfaces";
+
+interface FilterOptions {
+  category?: string;
+  priceRange?: string;
+}
 
 const Category = () => {
-  const [cakeDetail, setCakeDetail] = useState([]);
+  const [cakeDetail, setCakeDetail] = useState<ProductItem[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [selectedPriceRange, setSelectedPriceRange] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("asc");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+
+  const handleChange = ({ category, priceRange }: FilterOptions) => {
+    let filtered = cakeDetail;
+
+    if (category) {
+      setSelectedCategory(category);
+      if (category !== "All") {
+        filtered = filtered.filter((product) => product.category === category);
+      }
+    } else if (selectedCategory !== "All") {
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory
+      );
+    }
+
+    if (priceRange && priceRange.length > 0) {
+      setSelectedPriceRange(priceRange);
+      filtered = filtered.filter((product) => {
+        const productPrice = product.price;
+        const [min, max] = priceRange.split("-").map(Number);
+        return (
+          productPrice >= min &&
+          (max ? productPrice <= max : productPrice > min)
+        );
+      });
+    } else if (selectedPriceRange && selectedPriceRange.length > 0) {
+      filtered = filtered.filter((product) => {
+        const productPrice = product.price;
+        const [min, max] = selectedPriceRange.split("-").map(Number);
+        return (
+          productPrice >= min &&
+          (max ? productPrice <= max : productPrice > min)
+        );
+      });
+    }
+
+    let sortedProducts = [...filtered];
+    if (sortBy == "asc") {
+      sortedProducts.sort((a, b) => a.price - b.price);
+    }
+    if (sortBy == "desc") {
+      sortedProducts.sort((a, b) => b.price - a.price);
+    }
+
+    setFilteredProducts(sortedProducts);
+  };
+
+  const handleSort = ({ sortBy }: { sortBy: string }) => {
+    let sortedProducts = [...filteredProducts];
+    if (sortBy == "asc") {
+      sortedProducts.sort((a, b) => a.price - b.price);
+      setSortBy(sortBy);
+    }
+    if (sortBy == "desc") {
+      sortedProducts.sort((a, b) => b.price - a.price);
+      setSortBy(sortBy);
+    }
+
+    setFilteredProducts(sortedProducts);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    const filtered = cakeDetail.filter((product) =>
+      product.productName.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  };
+
   useEffect(() => {
+    const loadImage = (imageUrl: string) => {
+      return new Promise((resolve, reject) => {
+        const loadImg = new Image();
+        loadImg.src = imageUrl;
+        loadImg.onload = () => resolve(imageUrl); // Removed the timeout
+        loadImg.onerror = reject;
+      });
+    };
+
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:3001/api/v1/products");
-        // Handle the response data
+        const products = response.data.data;
+    
+        // Preload all images
+        const imagePreloadPromises = products.map((product: ProductItem) =>
+          loadImage(product.productPic).catch((err) => {
+            console.error(`Error loading image for product ${product.id}:`, err);
+          })
+        );
+    
+        // Wait for all images to be preloaded
+        await Promise.all(imagePreloadPromises);
+    
+        // Update state after preload
         setLoading(false);
-        setCakeDetail(response.data.data);
-        console.log(response.data.data);
+        setCakeDetail(products);
+        setFilteredProducts(products); // Show all products by default
       } catch (error) {
-        // Handle any errors
         console.error("Error fetching data:", error);
       }
     };
-
+    
     fetchData();
   }, []);
-  if (loading) return <div>Loading</div>;
+
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar />
+          <NavBar onSearch={handleSearch} />
         </div>
 
         <div className="flex justify-between items-center p-10 ml-10">
@@ -40,19 +143,23 @@ const Category = () => {
             <p className="px-3 text-[26px]">|</p>
             <p className="text-[15px] text-[#666666]">All Product</p>
           </div>
-
-          <div className="flex items-center mr-10">
-            <p className="text-[15px] mr-3 font-semibold">Sort by :</p>
-            <Dropdown />
-          </div>
         </div>
 
-        <div className="flex justify-between items-start">
-          <Slicer />
+        <div className="flex justify-between items-start px-[50px] mb-[50px]">
+          <div>
+            <div className="flex items-center px-[25px] mb-[20px]">
+              <p className="text-[15px] mr-3 font-semibold">Sort by :</p>
+              <Dropdown onSelect={handleSort} />
+            </div>
+
+            <div className="">
+              <Slicer onChange={handleChange} />
+            </div>
+          </div>
 
           {/* ProductCard */}
-          <div className="flex flex-wrap">
-          {cakeDetail.map((product, index) => (
+          <div className="grid grid-cols-3 gap-4">
+            {filteredProducts.map((product, index) => (
               <ProductCard
                 key={index}
                 id={product.id}
@@ -61,15 +168,7 @@ const Category = () => {
                 category={product.category}
                 imgUrl={product.productPic}
               />
-          ))}
-            {/* <ProductCard
-              id="Bc-01"
-              name="Jubilant Occasion"
-              price={800}
-              category="Birthday cake"
-              imgUrl="https://drive.google.com/thumbnail?id=1qA06JTgLyYPHg41MNrmAF3hJh388eR1A&sz=w1000"
-            /> */}
-           
+            ))}
           </div>
         </div>
         <Footer />
