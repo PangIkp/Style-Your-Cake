@@ -20,7 +20,8 @@ import Cart from "./pages/Cart";
 import WriteOnCake from "./pages/WriteOnCake";
 import Decorate from "./pages/Decorate";
 import Payment from "./pages/Payment";
-import { CartProvider } from "./components/CartContext"; // นำเข้า CartProvider
+// import { CartProvider } from "./components/CartContext"; // นำเข้า CartProvider
+import Test from "./pages/Test";
 
 const router = createBrowserRouter([
   { path: "/", element: <Landing key="landing" /> },
@@ -40,10 +41,11 @@ const router = createBrowserRouter([
   { path: "/write", element: <WriteOnCake key="write" /> },
   { path: "/decorate", element: <Decorate key="decorate" /> },
   { path: "/payment", element: <Payment key="payment" /> },
+  { path: "/test", element: <Test/>}
 ]);
 
 export const App = () => (
-  <CartProvider>
+  // <CartProvider>
     <RouterProvider router={router} />
-  </CartProvider>
+  // </CartProvider>
 );

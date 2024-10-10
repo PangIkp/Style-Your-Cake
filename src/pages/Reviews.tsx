@@ -3,8 +3,9 @@ import ReviewCard from "../components/ReviewCard";
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import Copyright from '../components/Copyright';
-
+import { useMainStore } from '../mainStore';
 const Reviews = () => {
+  const { reviewDetail } = useMainStore(); 
   return (
     <div>
       <div className="mt-[140px]">
@@ -22,12 +23,12 @@ const Reviews = () => {
       </p>
 
       <div className="flex flex-wrap ml-20">
+        <ReviewCard firstName={reviewDetail.firstName} rating={reviewDetail.rating} comment={reviewDetail.comment} date={reviewDetail.date}/>
+        {/* <ReviewCard/>
         <ReviewCard/>
         <ReviewCard/>
         <ReviewCard/>
-        <ReviewCard/>
-        <ReviewCard/>
-        <ReviewCard/>
+        <ReviewCard/> */}
       </div>
 
       <div className="mt-20">

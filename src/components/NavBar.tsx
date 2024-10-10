@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import { useCart } from './CartContext'; 
+import { useMainStore } from "../mainStore";
 
 interface NavBarProps {
   onSearch: (query: string) => void;
@@ -12,7 +12,7 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
   const [scroll, setScroll] = useState(0);
   const navigate = useNavigate(); 
 
-  const { items } = useCart();
+  const { items } = useMainStore();
 
   // Calculate the number of unique items in the cart
   const totalUniqueItems = new Set(items.map(item => item.id)).size;

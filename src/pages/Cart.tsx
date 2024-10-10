@@ -5,10 +5,12 @@ import Copyright from "../components/Copyright";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import { Link, useNavigate } from "react-router-dom";
-import { useCart } from "../components/CartContext";
+import { useMainStore } from "../mainStore";
 
 const Cart: React.FC = () => {
-  const { items, removeItem, updateItemQuantity } = useCart();
+  // const { items, removeItem, updateItemQuantity } = useCart();
+  const { items , setItems, updateItemQuantity, removeItem} = useMainStore();
+
   const navigate = useNavigate();
 
   const handleCheckout = () => {
@@ -18,6 +20,7 @@ const Cart: React.FC = () => {
     );
     const totalWithVAT = (subtotal * 1.07).toFixed(2);
     const shippingFee = 300; // Example shipping fee
+    setItems([]);
 
     navigate("/payment", {
       state: {
@@ -28,22 +31,24 @@ const Cart: React.FC = () => {
     });
   };
 
-  const handleIncrease = (productId: string) => {
+  const handleIncrease = (id: string) => {
+    // console.log(items);
     updateItemQuantity(
-      productId,
-      items.find((item) => item.productId === productId)!.quantity + 1
+      id,
+      items.find((item) => item.id === id)!.quantity + 1
     );
+    console.log(JSON.stringify(items));
   };
 
-  const handleDecrease = (productId: string) => {
-    const item = items.find((item) => item.id === productId);
+  const handleDecrease = (id: string) => {
+    const item = items.find((item) => item.id === id);
     if (item && item.quantity > 1) {
-      updateItemQuantity(productId, item.quantity - 1);
+      updateItemQuantity(id, item.quantity - 1);
     }
   };
 
-  const handleRemove = (productId: string) => {
-    removeItem(productId);
+  const handleRemove = (id: string) => {
+    removeItem(id);
   };
 
   const subtotal = items.reduce(
@@ -71,8 +76,8 @@ const Cart: React.FC = () => {
                 <CartItem
                   key={item.id}
                   {...item}
-                  onIncrease={() => handleIncrease(item.productId)}
-                  onDecrease={() => handleDecrease(item.productId)}
+                  onIncrease={() => handleIncrease(item.id)}
+                  onDecrease={() => handleDecrease(item.id)}
                   onRemove={() => handleRemove(item.id)}
                 />
               ))

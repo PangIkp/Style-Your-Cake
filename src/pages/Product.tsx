@@ -6,14 +6,14 @@ import ProductCard from "../components/ProductCard";
 import Copyright from "../components/Copyright";
 import axios from "axios";
 import { ProductItem } from "../interfaces";
-import { useCart } from "../components/CartContext";
+import { useMainStore } from "../mainStore";
 
 const Product: React.FC = () => {
   const location = useLocation();
   const { id, name, price: locationPrice, category, imgUrl } = location.state || {};
 
   const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>([]);
-  const { items, updateItemQuantity, addToCart } = useCart(); // Access addToCart from context
+  const { items, addItem } = useMainStore(); // ใช้ Zustand Store
 
   const [message, setMessage] = useState(""); // State to store the message
 
@@ -27,13 +27,10 @@ const Product: React.FC = () => {
     }
   }, [category]);
 
-  
-
   const fetchRelatedProducts = async (category: string) => {
     try {
       const response = await axios.get("http://localhost:3001/api/v1/products");
       const products = response.data.data;
-      // Filter products by category and exclude the current product
       const filteredProducts = products.filter(
         (product: ProductItem) => product.category === category && product.id !== id
       );
@@ -47,7 +44,6 @@ const Product: React.FC = () => {
     }
   };
 
-  // Renamed to avoid conflict
   const [quantity, setQuantity] = useState<number>(1);
   const [currentPrice, setCurrentPrice] = useState<number>(locationPrice || 1250);
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
@@ -78,21 +74,20 @@ const Product: React.FC = () => {
       return;
     }
     const size = sizes[selectedSize];
-    // const item = items.find(item => item.id === id);
-    // if (item) {
-      // updateItemQuantity(item.productId, item.quantity + quantity);
-    // } else {
-      addToCart({
-        id: `${id}(${size.weight})`,
-        image: imgUrl,
-        name,
-        productId: id.toString(),
-        quantity,
-        price: currentPrice * quantity,  // Update total price based on quantity
-        details: message ? `Message : ${message}` : "",  // Only add 'Message:' if message exists
-        size: `Size : ${size.weight}`, // Keep only this size property
-      });      
-    // }
+    
+    // เพิ่มรายการลงในตะกร้าโดยใช้ Zustand
+    addItem({
+      id: `${id}(${size.weight})`,
+      image: imgUrl,
+      name,
+      productId: id.toString(),
+      quantity,
+      price: currentPrice * quantity,  // Update total price based on quantity
+      details: message ? `Message : ${message}` : "",  // Only add 'Message:' if message exists
+      size: `Size : ${size.weight}`, // Keep only this size property
+    });    
+
+    alert(`Added ${name} (Size: ${size.weight}) to the cart successfully!`);
   };
 
   return (

@@ -1,15 +1,17 @@
+import { useLocation } from "react-router-dom";
 import Copyright from "../components/Copyright";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import { Link } from "react-router-dom";
 import OrderSummary from "../components/OrderItem";
 
-const Order = () => {
+const Order: React.FC = () => {
+
   return (
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar onSearch={() => {}}/>
+          <NavBar onSearch={() => {}} />
         </div>
       </div>
       <div className="flex flex-col p-20">
@@ -65,13 +67,13 @@ const Order = () => {
           </div>
 
           <div className="md:w-2/3 md:ml-8 mt-8 md:mt-0">
-          <OrderSummary/>
-          <OrderSummary/>
+          <OrderSummary />
+        
+           
+       
           </div>
         </div>
-       
       </div>
-
 
       <Footer />
       <Copyright />
