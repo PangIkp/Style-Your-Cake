@@ -4,9 +4,13 @@ import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import { Link } from "react-router-dom";
 import OrderSummary from "../components/OrderItem";
+import { useMainStore } from "../mainStore";
+import { OrderSummaryType } from "../interfaces";
 
 const Order: React.FC = () => {
-
+  const { orderDetailList } = useMainStore(); 
+  
+ 
   return (
     <div>
       <div className="mt-[140px]">
@@ -67,10 +71,14 @@ const Order: React.FC = () => {
           </div>
 
           <div className="md:w-2/3 md:ml-8 mt-8 md:mt-0">
-          <OrderSummary />
-        
-           
-       
+            {orderDetailList.length > 0 ? (
+orderDetailList.map((orderDetail:OrderSummaryType, index) => (
+              <OrderSummary orderDetail={orderDetail} key={index}/>
+            ))) : (
+              <p className="text-center text-[13px]">
+                No items in your order.
+              </p>
+            )}
           </div>
         </div>
       </div>

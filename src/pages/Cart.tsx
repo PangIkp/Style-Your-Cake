@@ -9,7 +9,7 @@ import { useMainStore } from "../mainStore";
 
 const Cart: React.FC = () => {
   // const { items, removeItem, updateItemQuantity } = useCart();
-  const { items , setItems, updateItemQuantity, removeItem} = useMainStore();
+  const { items, updateItemQuantity, removeItem} = useMainStore();
 
   const navigate = useNavigate();
 
@@ -20,7 +20,6 @@ const Cart: React.FC = () => {
     );
     const totalWithVAT = (subtotal * 1.07).toFixed(2);
     const shippingFee = 300; // Example shipping fee
-    setItems([]);
 
     navigate("/payment", {
       state: {

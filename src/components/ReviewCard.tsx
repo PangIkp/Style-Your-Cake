@@ -53,7 +53,7 @@ const ReviewCard = ({
           </div>
 
           {/* Date of Customer response */}
-          <div className="ml-[125px] flex items-center">
+          <div className="ml-[110px] flex items-center">
             <p className="text-[13px] font-light">{formattedDate(date)}</p>
           </div>
 

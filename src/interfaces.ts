@@ -57,6 +57,7 @@ export interface Tambon {
     amphure: Amphure[];
   }
 export interface OrderSummaryType {
+    orderId: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -71,3 +72,11 @@ export interface OrderSummaryType {
     subtotal: number;
     totalWithVAT: number;
   }
+
+export interface ReviewType {
+  orderId: string;
+  firstName: string;
+  rating: number;
+  comment: string;
+  date: string;
+}

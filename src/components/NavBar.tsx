@@ -15,7 +15,7 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
   const { items } = useMainStore();
 
   // Calculate the number of unique items in the cart
-  const totalUniqueItems = new Set(items.map(item => item.id)).size;
+  const totalUniqueItems = items ? new Set(items.map(item => item.id)).size: 0;
 
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

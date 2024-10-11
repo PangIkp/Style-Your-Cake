@@ -6,11 +6,11 @@ import Copyright from "../components/Copyright";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import SummaryItem from "./Summary";
-import { CartItemType, OrderSummaryType, Province, Amphure, Tambon } from "../interfaces";
+import { CartItemType, OrderSummaryType, Province, Amphure, Tambon, ReviewType } from "../interfaces";
 import { useMainStore } from "../mainStore";
 
 const Payment: React.FC = () => {
-  const { setOrderDetail } = useMainStore();
+  const { setOrderDetail, setItems:clearItems, addOrderDetail, reviewDetailList, addReviewDetail } = useMainStore();
   const location = useLocation();
   const [items, setItems] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
@@ -42,6 +42,12 @@ const Payment: React.FC = () => {
     district: "",
     subdistrict: "",
   });
+
+  const generateOrderID = () => {
+    const prefix = "OR"; // คำเริ่มต้นสำหรับ Order ID
+    const randomNumber = Math.floor(10000 + Math.random() * 90000); // สุ่มตัวเลข 5 หลัก
+    return `${prefix}${randomNumber}`;
+  };
 
   useEffect(() => {
     // ตรวจสอบว่า location.state มีข้อมูลหรือไม่
@@ -221,6 +227,7 @@ const Payment: React.FC = () => {
       });
 
       const orderDetail: OrderSummaryType = {
+        orderId: generateOrderID(),
         firstName,
         lastName,
         email,
@@ -235,10 +242,19 @@ const Payment: React.FC = () => {
         subtotal,
         totalWithVAT,
       };
+      const reviewDetail : ReviewType = {
+        orderId: orderDetail.orderId,
+        firstName,
+        rating: 0,
+        comment: "",
+        date: "",
+      }
   
       // อัพเดต orderDetail ใน store
-      setOrderDetail(orderDetail);
-
+      // setOrderDetail(orderDetail);
+      clearItems([]);
+      addOrderDetail(orderDetail);
+      addReviewDetail(reviewDetail);
       navigate("/order");
     }
   };
