@@ -3,16 +3,23 @@ import { Link, useNavigate } from "react-router-dom";
 import Copyright from '../components/Copyright';
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar';
+import { useHiddenAccount } from "../mainStore";
 import axios from 'axios';
 
-const Login = () => {
+interface LoginProps {
+  onLogin: () => void; // เพิ่ม callback สำหรับแจ้งเมื่อ login สำเร็จ
+}
+
+const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
+    userNameOrEmail: '',
     password: '',
   });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const setIsLoggedIn = useHiddenAccount((state) => state.setIsLoggedIn);
 
   // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,30 +34,42 @@ const Login = () => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+    setLoading(true); // Set loading to true on form submission
 
     try {
       const response = await axios.post('http://localhost:3001/api/v1/auth/login', formData);
       setSuccess(response.data.message);
+      setIsLoggedIn(true);
+      console.log(response)
       
-      // Store the user session here (if needed), e.g. save token
-      // localStorage.setItem('token', response.data.token);
+      // Store the login status in localStorage
+      localStorage.setItem('username', response.data.user.username); // Assuming the API returns username
+      localStorage.setItem('isLoggedIn', 'true');
+      
+      // Navigate to the home page after login
+      navigate('/');  // เพิ่มบรรทัดนี้เพื่อนำทางไปหน้าโฮมเพจหลังจาก login สำเร็จ
+      // Call the onLogin callback to update the state in NavBar
+      // onLogin();
 
-      // Redirect to homepage or dashboard
-      navigate('/');
+
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
+       setError(err.response.data.message)
       } else {
-        setError('Login failed. Please try again.');
+      
       }
+    } finally {
+      setLoading(false); // Reset loading state
+      // navigate('/'); 
     }
-  };
+};
+
 
   return (
     <div>
       <div className="mt-[140px]">
         <div className="fixed top-0 z-10 w-full ">
-          <NavBar onSearch={() => {}} />
+        <NavBar onSearch={() => {}} />
         </div>
       </div>
 
@@ -84,11 +103,11 @@ const Login = () => {
         <form className="space-y-6 w-[480px]" onSubmit={handleSubmit}>
           <div className="relative w-[480px]">
             <input
-              name="username"
+              name="userNameOrEmail"
               type="text"
               placeholder="Username"
               className="border rounded-[10px] px-4 py-3 w-full text-[14px]"
-              value={formData.username}
+              value={formData.userNameOrEmail}
               onChange={handleChange}
               required
             />
@@ -121,8 +140,12 @@ const Login = () => {
             </Link>
           </div>
 
-          <button type="submit" className="mt-6 mb-6 bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[45px] w-[480px]">
-            Login
+          <button 
+            type="submit" 
+            className={`mt-6 mb-6 bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[45px] w-[480px] ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={loading} // Disable button while loading
+          >
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 

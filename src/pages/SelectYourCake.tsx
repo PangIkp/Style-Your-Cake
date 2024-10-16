@@ -1,23 +1,39 @@
 import React, { useState } from "react";
 import NavBar from "../components/NavBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Copyright from "../components/Copyright";
 
 const SelectYourCake: React.FC = () => {
-  const [selectedShape, setSelectedShape] = useState<string | null>(null); // ใช้ string หรือ null
-  const handleShapeClick = (shape: string) => {
-    setSelectedShape(shape); // รับค่า string ได้
-  };
-
+  const [selectedShape, setSelectedShape] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
-  const handleSizeClick = (index: number) => {
-    setSelectedSize(index); // อัปเดต selectedSize เมื่อคลิก
+  const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const navigate = useNavigate();
+
+  const handleShapeClick = (shape: string) => {
+    setSelectedShape(shape);
   };
 
-  const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null); // ใช้ string หรือ null
+  const handleSizeClick = (index: number) => {
+    setSelectedSize(index);
+  };
+
   const handleFlavorClick = (flavor: string) => {
-    setSelectedFlavor(flavor); // อัปเดต selectedFlavor เมื่อคลิก
+    setSelectedFlavor(flavor);
+  };
+
+  const handleSubmit = () => {
+    if (!selectedShape || !selectedSize || !selectedFlavor) {
+        alert("Please choose the shape, size, and flavor of your cake."); // แสดง pop-up
+    } else {
+        setErrorMessage("");
+        const confirmationMessage = `You have chosen the cake.\nShape : ${selectedShape}\nSize : ${selectedSize}\nFlavor : ${selectedFlavor}`;
+        alert(confirmationMessage); // แสดง pop-up
+        setErrorMessage(""); // ล้างข้อความ error
+        navigate("/decorate");
+    }
   };
 
   return (
@@ -238,15 +254,14 @@ const SelectYourCake: React.FC = () => {
           </div>
         </div>
 
-        <Link
-          to="/decorate"
+        <div
           className="flex justify-center mt-10 mb-20"
           onClick={() => window.scrollTo(0, 0)}
         >
-          <button className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[13px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[40px] w-[450px]">
+          <button onClick={handleSubmit} className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[13px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[40px] w-[450px]">
             Next Step
           </button>
-        </Link>
+        </div>
       </div>
 
       <Footer />

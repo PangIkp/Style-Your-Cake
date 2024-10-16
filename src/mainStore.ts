@@ -31,11 +31,22 @@ interface MainStore {
   updateReviewDetail: (reviewDetail: ReviewType) => void;
 }
 
+
 export const generateOrderID = () => {
   const prefix = "OR"; // คำเริ่มต้นสำหรับ Order ID
   const randomNumber = Math.floor(10000 + Math.random() * 90000); // สุ่มตัวเลข 5 หลัก
   return `${prefix}${randomNumber}`;
 };
+
+interface HiddenAccountState {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (loggedIn: boolean) => void;
+}
+
+export const useHiddenAccount = create<HiddenAccountState>((set) => ({
+  isLoggedIn: false, // สถานะการล็อกอินเริ่มต้น
+  setIsLoggedIn: (loggedIn: boolean) => set({ isLoggedIn: loggedIn }),
+}));
 
 // Create the Zustand store with persist middleware
 export const useMainStore = create<MainStore>()(

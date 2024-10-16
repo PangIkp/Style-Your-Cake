@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useMainStore } from "../mainStore";
+import { useHiddenAccount } from "../mainStore"; // ดึงสถานะจาก mainStore
 
 interface NavBarProps {
   onSearch: (query: string) => void;
@@ -10,13 +11,17 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [scroll, setScroll] = useState(0);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
+  const isLoggedIn = useHiddenAccount((state) => state.isLoggedIn);
   const { items } = useMainStore();
 
-  // Calculate the number of unique items in the cart
-  const totalUniqueItems = items ? new Set(items.map(item => item.id)).size: 0;
+  const username = localStorage.getItem('username');
 
+  // Calculate the number of unique items in the cart
+  const totalUniqueItems = items
+    ? new Set(items.map((item) => item.id)).size
+    : 0;
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -27,7 +32,7 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
   const handleScroll = () => setScroll(document.documentElement.scrollTop);
 
   const handleSearchClick = () => {
-    navigate('/category'); // Change this path to your actual Category Page path
+    navigate("/category"); // Change this path to your actual Category Page path
   };
 
   useEffect(() => {
@@ -63,7 +68,11 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
           <span className="font-bold text-[14px] mr-[30px]">Contact us</span>
 
           <Link to="/">
-            <img src="/Facebook.png" alt="Logo" className="h-[15px] ml-[50px]" />
+            <img
+              src="/Facebook.png"
+              alt="Logo"
+              className="h-[15px] ml-[50px]"
+            />
           </Link>
 
           <Link
@@ -80,7 +89,10 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
             alt="Instagram"
             className="h-[15px] ml-[30px]"
           />
-          <Link to="https://www.instagram.com/" className="text-[14px] underline">
+          <Link
+            to="https://www.instagram.com/"
+            className="text-[14px] underline"
+          >
             @StyleYourCake_
           </Link>
         </div>
@@ -99,21 +111,30 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
 
         <div className="flex justify-start items-center">
           <div className="flex items-center space-x-[20px] ml-[30px]">
-          <Link to="/category" className="text-[#503C3C] text-[14px] hover:text-[#D63484] cursor-pointer">
+            <Link
+              to="/category"
+              className="text-[#503C3C] text-[14px] hover:text-[#D63484] cursor-pointer"
+            >
               Category
             </Link>
 
             <div className="border border-[0.5px] border-solid border-[#503C3C] h-6" />
 
             <div className="flex items-center space-x-2">
-              <Link to="/design" className="text-[#503C3C] text-[14px] hover:text-[#D63484] cursor-pointer">
+              <Link
+                to="/design"
+                className="text-[#503C3C] text-[14px] hover:text-[#D63484] cursor-pointer"
+              >
                 Design Your Cake
               </Link>
               <img src="/Wink.png" alt="Wink" className="h-[15px]" />
             </div>
             <div className="border border-[0.8px] border-solid border-[#503C3C] h-6" />
 
-            <Link to="/reviews" className="text-[#503C3C] text-[14px] hover:text-[#D63484] cursor-pointer">
+            <Link
+              to="/reviews"
+              className="text-[#503C3C] text-[14px] hover:text-[#D63484] cursor-pointer"
+            >
               Reviews
             </Link>
           </div>
@@ -124,7 +145,7 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
             <input
               value={searchQuery}
               onChange={handleSearchChange}
-              onClick={handleSearchClick} 
+              onClick={handleSearchClick}
               placeholder="Search for cakes"
               className="border rounded-full px-4 py-2 w-full pr-10 text-[14px]"
             />
@@ -142,21 +163,40 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
               className="h-[26px] w-[28px] ml-5 hover:bg-[#FFCCD2]"
             />
             <span className="absolute top-4 right-0 bg-[#503C3C] rounded-full h-[17px] w-[17px] flex items-center justify-center">
-              <span className="text-[9px] font-bold text-white">{totalUniqueItems}</span>
+              <span className="text-[9px] font-bold text-white">
+                {totalUniqueItems}
+              </span>
             </span>
           </Link>
 
-          <Link to="/login">
-            <button className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[13px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] h-[35px] w-[100px]">
-              Login
-            </button>
-          </Link>
-
-          <Link to="/signup">
-            <button className="bg-white text-[13px] text-[#503C3C] hover:bg-[#FFCCD2] font-bold rounded h-[35px] w-[100px] rounded-[20px] border-[1px] border-[#503C3C]">
-              Sign up
-            </button>
-          </Link>
+          {/* ซ่อนปุ่ม login และ sign up เมื่อ isLoggedIn เป็น true */}
+          {!isLoggedIn ? (
+            <>
+              <Link to="/login">
+                <button className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[13px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] w-[100px] h-[35px]">
+                  Login
+                </button>
+              </Link>
+              <Link to="/signup">
+                <button className="bg-white text-[13px] text-[#503C3C] hover:bg-[#FFCCD2] font-bold rounded h-[35px] w-[100px] rounded-[20px] border-[1px] border-[#503C3C]">
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          ) : (
+            <Link
+              to="/account"
+              className="grid grid-cols-[auto_1fr] items-center gap-2"
+            >
+              <img
+                src="User.png"
+                className="w-[26px] ml-5" // ขนาดรูปภาพ
+                alt="User"
+              />
+              <span className="text-[13px] text-[#503C3C]">{username}</span>{" "}
+              {/* เปลี่ยน Username เป็นชื่อผู้ใช้จริง */}
+            </Link>
+          )}
         </div>
       </div>
     </div>

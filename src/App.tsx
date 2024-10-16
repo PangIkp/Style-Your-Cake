@@ -1,4 +1,3 @@
-// App.tsx
 import {
   createBrowserRouter,
   RouterProvider,
@@ -20,6 +19,7 @@ import Cart from "./pages/Cart";
 import WriteOnCake from "./pages/WriteOnCake";
 import Decorate from "./pages/Decorate";
 import Payment from "./pages/Payment";
+import { useState } from "react";
 // import { CartProvider } from "./components/CartContext"; // นำเข้า CartProvider
 import Test from "./pages/Test";
 
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
   { path: "/category", element: <Category key="category" /> },
   { path: "/design", element: <DesignYourCake key="design" /> },
   { path: "/reviews", element: <Reviews key="reviews" /> },
-  { path: "/login", element: <Login key="login" /> },
+  { path: "/login", element: <Login key="login"/> },
   { path: "/signup", element: <SignUp key="signup" /> },
   { path: "/select", element: <SelectYourCake key="select" /> },
   { path: "/password", element: <Password key="password" /> },
