@@ -1,9 +1,29 @@
+import React, { useState, useEffect } from "react";
 import Copyright from "../components/Copyright";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useHiddenAccount } from "../mainStore";
 
 const Account = () => {
+  const navigate = useNavigate();
+  const { setIsLoggedIn } = useHiddenAccount();
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check if user is logged in on component mount
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(loggedInStatus === "true");
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("username"); // ลบข้อมูล username จาก localStorage
+    setIsLoggedIn(false); // อัปเดตสถานะล็อกเอาต์
+    navigate("/"); // หลังจาก logout ให้ไปหน้า home
+    window.location.reload(); // โหลดหน้าใหม่เพื่ออัพเดตสถานะการล็อกอิน
+  };
+
+
   return (
     <div>
       <div className="mt-[140px]">
@@ -40,7 +60,7 @@ const Account = () => {
               <Link
                 to="/Order"
                 className="p-4 hover:bg-[#FFE5E8] hover:cursor-pointer border-r-4 border-r-[#D63484] border-t border-b border-l rounded-[8px] flex items-center"
-              >
+                >
                 <div className="mr-2"></div>
                 <img src="/Order.png" alt="account" className="w-6 mr-4"></img>
                 <div>
@@ -51,7 +71,7 @@ const Account = () => {
               <Link
                 to="/Login"
                 className="p-4 hover:bg-[#FFE5E8] hover:cursor-pointer border-r-4 border-r-[#D63484] border-t border-b border-l rounded-[8px] flex items-center"
-              >
+                onClick={handleLogout}>
                 <div className="mr-2"></div>
                 <img src="/Logout.png" alt="account" className="w-6 mr-4"></img>
                 <div>

@@ -38,15 +38,29 @@ export const generateOrderID = () => {
   return `${prefix}${randomNumber}`;
 };
 
+// Define the state interface
 interface HiddenAccountState {
-  isLoggedIn: boolean;
-  setIsLoggedIn: (loggedIn: boolean) => void;
+  isLoggedIn: boolean; // Login status
+  username: string | null; // Store username
+  setIsLoggedIn: (loggedIn: boolean) => void; // Method to set login state
+  setUsername: (name: string | null) => void; // Method to set username
 }
 
-export const useHiddenAccount = create<HiddenAccountState>((set) => ({
-  isLoggedIn: false, // สถานะการล็อกอินเริ่มต้น
-  setIsLoggedIn: (loggedIn: boolean) => set({ isLoggedIn: loggedIn }),
-}));
+// Create the store with persistence
+export const useHiddenAccount = create<HiddenAccountState>()(
+  persist(
+    (set) => ({
+      isLoggedIn: false, // Initial login state
+      username: null, // Initial username
+      setIsLoggedIn: (loggedIn: boolean) => set({ isLoggedIn: loggedIn }),
+      setUsername: (name: string | null) => set({ username: name }),
+    }),
+    {
+      name: 'style-your-cake-authentication', // Unique name in storage
+      storage: createJSONStorage(() => sessionStorage), // Using sessionStorage
+    }
+  )
+);
 
 // Create the Zustand store with persist middleware
 export const useMainStore = create<MainStore>()(

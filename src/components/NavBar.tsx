@@ -13,10 +13,18 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
   const [scroll, setScroll] = useState(0);
   const navigate = useNavigate();
 
+  // Check login status using state from mainStore
   const isLoggedIn = useHiddenAccount((state) => state.isLoggedIn);
   const { items } = useMainStore();
+  
+  const [username, setUsername] = useState<string | null>(null);
+  useEffect(() => {
+    // ดึงชื่อผู้ใช้จาก localStorage เมื่อโหลดคอมโพเนนต์
+    const storedUsername = localStorage.getItem("username");
+    setUsername(storedUsername);
+  }, []);
 
-  const username = localStorage.getItem('username');
+  // Fetch the username from localStorage
 
   // Calculate the number of unique items in the cart
   const totalUniqueItems = items
@@ -60,6 +68,8 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
     };
   }, [prevScrollPos]);
 
+  
+
   return (
     <div className={`w-full ${scroll > 100 ? "translate-y-[-60px]" : ""}`}>
       {/* Top bar */}
@@ -96,11 +106,11 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
             @StyleYourCake_
           </Link>
         </div>
-        <div className="flex items-center space-x-4">
+        {/* <div className="flex items-center space-x-4">
           <span className="font-bold text-[14px] mr-[12px]">Help</span>
           <img src="/Phone.png" alt="Phone" className="h-[12px] ml-[50px]" />
           <span className="text-[14px]">091-234-5678</span>
-        </div>
+        </div> */}
       </div>
 
       {/* Main NavBar */}
@@ -156,47 +166,49 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
             />
           </div>
 
-          <Link to="/cart" className="relative">
-            <img
-              src="/Cart.png"
-              alt="Cart"
-              className="h-[26px] w-[28px] ml-5 hover:bg-[#FFCCD2]"
-            />
-            <span className="absolute top-4 right-0 bg-[#503C3C] rounded-full h-[17px] w-[17px] flex items-center justify-center">
-              <span className="text-[9px] font-bold text-white">
-                {totalUniqueItems}
+          {isLoggedIn && (
+            <Link to="/cart" className="relative">
+              <img
+                src="/Cart.png"
+                alt="Cart"
+                className="h-[26px] w-[28px] ml-5 hover:bg-[#FFCCD2]"
+              />
+              <span className="absolute top-4 right-0 bg-[#503C3C] rounded-full h-[17px] w-[17px] flex items-center justify-center">
+                <span className="text-[9px] font-bold text-white">
+                  {totalUniqueItems}
+                </span>
               </span>
-            </span>
-          </Link>
+            </Link>
+          )}
 
           {/* ซ่อนปุ่ม login และ sign up เมื่อ isLoggedIn เป็น true */}
           {!isLoggedIn ? (
-            <>
-              <Link to="/login">
-                <button className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[13px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] w-[100px] h-[35px]">
-                  Login
-                </button>
-              </Link>
-              <Link to="/signup">
-                <button className="bg-white text-[13px] text-[#503C3C] hover:bg-[#FFCCD2] font-bold rounded h-[35px] w-[100px] rounded-[20px] border-[1px] border-[#503C3C]">
-                  Sign Up
-                </button>
-              </Link>
-            </>
-          ) : (
-            <Link
-              to="/account"
-              className="grid grid-cols-[auto_1fr] items-center gap-2"
-            >
-              <img
-                src="User.png"
-                className="w-[26px] ml-5" // ขนาดรูปภาพ
-                alt="User"
-              />
-              <span className="text-[13px] text-[#503C3C]">{username}</span>{" "}
-              {/* เปลี่ยน Username เป็นชื่อผู้ใช้จริง */}
+          <>
+            <Link to="/login">
+              <button className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[13px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] w-[100px] h-[35px]">
+                Login
+              </button>
             </Link>
-          )}
+            <Link to="/signup">
+              <button className="bg-white text-[13px] text-[#503C3C] hover:bg-[#FFCCD2] font-bold rounded h-[35px] w-[100px] rounded-[20px] border-[1px] border-[#503C3C]">
+                Sign Up
+              </button>
+            </Link>
+          </>
+        ) : (
+          <Link
+            to="/account"
+            className="grid grid-cols-[auto_1fr] items-center gap-2"
+          >
+            <img
+              src="User.png"
+              className="w-[26px] ml-5" // ขนาดรูปภาพ
+              alt="User"
+            />
+            <span className="text-[13px] text-[#503C3C]">{username}</span>{" "}
+            {/* แสดงชื่อผู้ใช้ที่เก็บใน localStorage */}
+          </Link>
+        )}
         </div>
       </div>
     </div>
