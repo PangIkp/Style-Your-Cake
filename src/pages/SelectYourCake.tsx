@@ -3,12 +3,15 @@ import NavBar from "../components/NavBar";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Copyright from "../components/Copyright";
+import { useMainStore } from "../mainStore";
 
 const SelectYourCake: React.FC = () => {
   const [selectedShape, setSelectedShape] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const { setFlavorColor } = useMainStore();
 
   const navigate = useNavigate();
 
@@ -25,16 +28,46 @@ const SelectYourCake: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    if (!selectedShape || !selectedSize || !selectedFlavor) {
+    if (!selectedShape || selectedSize == null || !selectedFlavor) {
         alert("Please choose the shape, size, and flavor of your cake."); // แสดง pop-up
     } else {
         setErrorMessage("");
-        const confirmationMessage = `You have chosen the cake.\nShape : ${selectedShape}\nSize : ${selectedSize}\nFlavor : ${selectedFlavor}`;
+        const confirmationMessage = `You have chosen the cake.\nShape : ${selectedShape}\nSize : ${selectedSize == 0 ? "1/2" : selectedSize}\nFlavor : ${selectedFlavor}`;
         alert(confirmationMessage); // แสดง pop-up
         setErrorMessage(""); // ล้างข้อความ error
+        
+        const color = flavorColors[selectedFlavor]; // Get the color for the selected flavor
+        if (color) {
+            setFlavorColor(color); // Set the color using setFlavorColor
+        } else {
+            console.warn(`No color defined for flavor: ${selectedFlavor}`);
+        }
+        
         navigate("/decorate");
     }
   };
+
+  const flavorColors: { [key: string]: number } = {
+    lemon: 0xFFFACD,       
+    chocolate: 0x5C4033,    
+    "white-chocolate": 0xFFFFF0, 
+    "red-velvet": 0x9B1B30, // DarkRed 0x9B1B30 0x8B0000
+    cheesecake: 0xfde696,   
+};
+
+  const sizePrices = [350, 550, 650, 750, 950]; // ราคาสำหรับขนาดต่างๆ
+  const flavorPrices: { [key: string]: number } = {
+    lemon: 120,
+    chocolate: 150,
+    "white-chocolate": 150,
+    "red-velvet": 200,
+    cheesecake: 250,
+  };
+
+  // คำนวณราคารวม
+  const sizePrice = selectedSize !== null ? sizePrices[selectedSize] : 0;
+  const flavorPrice = selectedFlavor ? flavorPrices[selectedFlavor] : 0;
+  const totalPrice = sizePrice + flavorPrice;
 
   return (
     <div>
@@ -253,6 +286,8 @@ const SelectYourCake: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <p className="font-medium mt-10 mb-5">Total price : {totalPrice} THB</p>
 
         <div
           className="flex justify-center mt-10 mb-20"

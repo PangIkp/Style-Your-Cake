@@ -20,6 +20,7 @@ interface MainStore {
   orderDetailList: OrderSummaryType[];
   reviewDetailList: ReviewType[];
   orderHistory: OrderSummaryType[];
+  flavorColor: number;
   addItem: (item: CartItem) => void;
   removeItem: (id: string) => void; // เพิ่มฟังก์ชันสำหรับการลบรายการ
   updateItemQuantity: (productId: string, quantity: number) => void; // เพิ่มฟังก์ชันสำหรับการอัปเดตจำนวนสินค้า
@@ -29,6 +30,7 @@ interface MainStore {
   setReviewDetail: (reviewDetail: any) => void;
   addReviewDetail: (reviewDetail: ReviewType) => void;
   updateReviewDetail: (reviewDetail: ReviewType) => void;
+  setFlavorColor: (color: number) => void;
 }
 
 
@@ -69,6 +71,7 @@ export const useMainStore = create<MainStore>()(
       items: [],
       orderHistory: [],
       orderDetailList: [],
+      flavorColor: 0xffffff,
       // orderDetailList: {
       //   orderID: "",
       //   firstName: "",
@@ -157,7 +160,6 @@ export const useMainStore = create<MainStore>()(
         set({ orderDetailList }),
       setReviewDetail: (reviewDetailList: ReviewType[]) =>
         set({ reviewDetailList }), // เพิ่มฟังก์ชันนี้
-
       addReviewDetail: (reviewDetail: ReviewType) =>
         set((state) => {
           // ถ้ายังไม่มีในตะกร้าให้เพิ่มรายการใหม่
@@ -165,6 +167,7 @@ export const useMainStore = create<MainStore>()(
             reviewDetailList: [...state.reviewDetailList, reviewDetail],
           };
         }),
+        setFlavorColor: (flavorColor: number) => set({flavorColor}),
     }),
     {
       name: "style-your-cake", // Unique name in storage

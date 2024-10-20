@@ -1,6 +1,7 @@
 import React from "react";
 import { useBearStore } from "../store";
 import { useMainStore } from "../mainStore";
+import CircleShape from "../components/CircleShape";
 
 function Test() {
 //   const bears = useBearStore((state) => state.bears);
@@ -18,6 +19,7 @@ console.log(items)
       >
   {/* {bears} */}
       </button>
+      {/* <CircleShape/> */}
     </div>
   );
 }

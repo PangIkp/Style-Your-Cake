@@ -1,11 +1,15 @@
+import CircleShape from "../components/CircleShape";
 import Copyright from "../components/Copyright";
 import Footer from "../components/Footer";
 import Ingredient from "../components/Ingredient";
 import NavBar from "../components/NavBar";
 import { useState } from "react";
+import { useMainStore } from "../mainStore";
 
 const Decorate = () => {
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]); // ใช้ array ของ string
+  const [color, setColor] = useState<number>(0xF4A460); // ใช้ state สำหรับสีเริ่มต้น
+  const { flavorColor } = useMainStore();
 
   const handleToppingClick = (topping: string) => {
     // ตรวจสอบว่า topping ถูกเลือกแล้วหรือไม่
@@ -40,7 +44,7 @@ const Decorate = () => {
         <div>
           <div className="flex">
             <div
-              className="max-h-[490px] p-4 overflow-y-auto w-1/4 bg-[#E06386] border border-r-[#E06386] border-l-[#9F9F9F] border-t-[#9F9F9F] border-b-[#9F9F9F] shadow-lg"
+              className="max-h-[490px] w-[15vw] p-4 overflow-y-auto w-1/4 bg-[#E06386] border border-r-[#E06386] border-l-[#9F9F9F] border-t-[#9F9F9F] border-b-[#9F9F9F] shadow-lg"
               style={{
                 scrollbarColor: "white #E06386",
                 scrollbarWidth: "thin",
@@ -48,31 +52,17 @@ const Decorate = () => {
             >
               <Ingredient />
               <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
-              <Ingredient />
             </div>
 
             {/* Cake Image Section */}
-            <div className="w-full mr-10 bg-[#FFCCD2] bg-opacity-50 border border-r-[#9F9F9F] border-t-[#9F9F9F] border-b-[#9F9F9F] shadow-lg flex items-center justify-center">
-              <img
-                src="/Hearth.png"
-                alt="Wink"
-                className="w-[320px] flex items-center"
-              />
+            <div className="mr-10  bg-[#FFCCD2] bg-opacity-50 border border-r-[#9F9F9F] border-t-[#9F9F9F] border-b-[#9F9F9F] shadow-lg flex -cneter">
+             <CircleShape color={flavorColor} />
             </div>
+
+        
             {/* scrollbar-color: rebeccapurple green; */}
             {/* Cake Details and Customization Section */}
-            <div className="flex flex-col justify-between w-1/2">
+            <div className="flex flex-col justify-between">
               <div
                 className="max-h-[430px] overflow-y-auto p-6 bg-white rounded-lg shadow-lg border flex flex-col"
                 style={{ scrollbarColor: "#D63484 white" }}
@@ -388,7 +378,7 @@ const Decorate = () => {
 
               {/* Add to Cart Button Section */}
               <div className="">
-                <button className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] w-full h-[40px]">
+                <button className="bg-gradient-to-b from-[#D63484] to-[#E06386] text-[14px] hover:from-[#D63484] hover:to-[#FFCCD2] text-white font-bold rounded-[20px] w-full h-[40px] mt-5">
                   Add to cart
                 </button>
               </div>
